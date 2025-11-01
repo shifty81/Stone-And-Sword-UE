@@ -16,4 +16,16 @@ class STONEANDSWORD_API AStoneAndSwordGameModeBase : public AGameModeBase
 	
 public:
 	AStoneAndSwordGameModeBase();
+
+protected:
+	virtual void StartPlay() override;
+
+	/** Whether to automatically setup the world with WorldSetupManager */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Setup")
+	bool bAutoSpawnWorldSetupManager;
+
+private:
+	/** Reference to the spawned WorldSetupManager */
+	UPROPERTY()
+	class AWorldSetupManager* WorldSetupManager;
 };

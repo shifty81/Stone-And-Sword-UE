@@ -71,6 +71,14 @@ void AWorldGenerator::ClearWorld()
 	ProceduralMesh->ClearAllMeshSections();
 }
 
+void AWorldGenerator::SetWorldParameters(int32 InWorldSizeX, int32 InWorldSizeY, float InGridResolution, float InHeightVariation)
+{
+	WorldSizeX = FMath::Clamp(InWorldSizeX, 100, 100000);
+	WorldSizeY = FMath::Clamp(InWorldSizeY, 100, 100000);
+	GridResolution = FMath::Clamp(InGridResolution, 10.0f, 1000.0f);
+	HeightVariation = FMath::Clamp(InHeightVariation, 0.0f, 500.0f);
+}
+
 void AWorldGenerator::GenerateTerrainMesh(TArray<FVector>& Vertices, TArray<int32>& Triangles, 
 										  TArray<FVector>& Normals, TArray<FVector2D>& UVs, 
 										  TArray<FColor>& VertexColors)
