@@ -77,6 +77,20 @@ The `AWorldPlayerCharacter` class provides player control:
 - Visual Studio 2022 (for Windows) or appropriate C++ development tools
 - Git
 
+### Quick Start for Testing
+
+**The fastest way to test the world generation system:**
+
+1. Clone this repository
+2. Open `StoneAndSword.uproject` in Unreal Engine 5.4
+3. Create a new Empty Level (File > New Level > Empty Level)
+4. Press Play (Alt+P)
+5. The world will automatically generate with all necessary components!
+
+See **TESTING.md** for detailed testing instructions and customization options.
+
+### Full Setup for Development
+
 ### Opening the Project
 1. Clone this repository
 2. Navigate to the project directory
