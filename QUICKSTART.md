@@ -1,0 +1,198 @@
+# Quick Start Guide
+
+This guide will help you quickly get started with the Stone and Sword open world project.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+1. **Unreal Engine 5.4** installed from Epic Games Launcher
+2. **Visual Studio 2022** (Windows) or **Xcode** (macOS) with C++ development tools
+3. **Git** for version control
+
+## Step-by-Step Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/shifty81/Stone-And-Sword-UE.git
+cd Stone-And-Sword-UE
+```
+
+### 2. Generate Project Files
+
+**Windows:**
+- Right-click on `StoneAndSword.uproject`
+- Select "Generate Visual Studio project files"
+- Wait for the process to complete
+
+**macOS/Linux:**
+```bash
+# Path to your UE installation
+/path/to/UnrealEngine/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/path/to/StoneAndSword.uproject" -game
+```
+
+### 3. Build the Project
+
+**Option A: Using Visual Studio (Windows)**
+1. Open `StoneAndSword.sln`
+2. Select "Development Editor" configuration
+3. Set "StoneAndSword" as the startup project
+4. Press F5 or click "Local Windows Debugger"
+
+**Option B: Using Command Line**
+```bash
+# Windows
+"C:\Program Files\Epic Games\UE_5.4\Engine\Build\BatchFiles\Build.bat" StoneAndSwordEditor Win64 Development -Project="StoneAndSword.uproject"
+
+# macOS
+/Users/Shared/Epic\ Games/UE_5.4/Engine/Build/BatchFiles/Mac/Build.sh StoneAndSwordEditor Mac Development -Project="StoneAndSword.uproject"
+
+# Linux
+/home/user/UnrealEngine/Engine/Build/BatchFiles/Linux/Build.sh StoneAndSwordEditor Linux Development -Project="StoneAndSword.uproject"
+```
+
+### 4. Open the Editor
+
+After building successfully:
+- Double-click `StoneAndSword.uproject` to open the Unreal Editor
+- Or launch from Visual Studio
+
+## Creating Your First World
+
+### 1. Create a New Level
+
+1. In the editor, go to **File > New Level**
+2. Select "Empty Level"
+3. Save it as `MainWorld` in `Content/Maps/`
+
+### 2. Add Basic Lighting
+
+1. In the Place Actors panel, search for "Directional Light"
+2. Drag it into the level
+3. Position it above the origin (0, 0, 1000)
+4. Set rotation to (-50, 0, 0) for nice lighting angle
+
+### 3. Add Sky
+
+1. Search for "Sky Atmosphere" in Place Actors
+2. Drag it into the level
+3. Search for "Sky Light" and add it
+4. In Sky Light details, click "Recapture Scene"
+
+### 4. Add the World Generator
+
+1. In Place Actors panel, search for "WorldGenerator"
+2. Drag the WorldGenerator actor into the level
+3. In the Details panel, configure:
+   - **World Size X**: 10000 (10km)
+   - **World Size Y**: 10000 (10km)
+   - **Grid Resolution**: 100 (distance between vertices)
+   - **Height Variation**: 50 (slight undulation)
+   - **Auto Generate On Begin Play**: ✓ (checked)
+
+### 5. Add Player Start
+
+1. Search for "Player Start" in Place Actors
+2. Drag it into the level
+3. Position it at (0, 0, 200) - above where the terrain will be
+
+### 6. Test Your World
+
+1. Click the **Play** button in the toolbar
+2. You should see a flat terrain generated
+3. Use **WASD** to move around
+4. Use **Mouse** to look around
+5. Press **Spacebar** to jump
+
+## Creating Materials
+
+### Basic Terrain Material
+
+1. In Content Browser, navigate to `Content/Materials`
+2. Right-click and select **Material**
+3. Name it `M_Terrain`
+4. Open the material editor
+5. Add nodes:
+   - Texture Sample (T_Grass)
+   - Connect to Base Color
+6. Save and compile
+
+### Apply Material to World Generator
+
+1. Select the WorldGenerator in the level
+2. In Details panel, find "Terrain Material"
+3. Select `M_Terrain`
+4. Play again to see textured terrain
+
+## Customizing the World
+
+### Adjust Terrain Settings
+
+Select WorldGenerator and modify:
+- **World Size**: Increase for larger worlds
+- **Grid Resolution**: Decrease for more detail (warning: affects performance)
+- **Height Variation**: Increase for more dramatic terrain
+- **Noise Scale**: Adjust for different terrain patterns
+- **Random Seed**: Change to generate different terrain layouts
+
+### Character Movement
+
+The character settings can be adjusted in the WorldPlayerCharacter blueprint:
+- Movement speed: Edit `MaxWalkSpeed` in Character Movement
+- Camera distance: Edit `TargetArmLength` in Camera Boom
+- Jump height: Edit `JumpZVelocity` in Character Movement
+
+## Common Issues
+
+### Build Errors
+
+**Issue**: Missing ProceduralMeshComponent module
+**Solution**: Ensure the ProceduralMeshComponent plugin is enabled in the .uproject file
+
+**Issue**: Cannot generate project files
+**Solution**: Verify UE 5.4 is installed and associated with .uproject files
+
+### Runtime Issues
+
+**Issue**: No terrain appears
+**Solution**: 
+- Check WorldGenerator is in the level
+- Verify "Auto Generate On Begin Play" is checked
+- Check Output Log for errors
+
+**Issue**: Character falls through terrain
+**Solution**: 
+- Ensure Player Start is above terrain (Z > 100)
+- Verify ProceduralMesh has collision enabled
+- Check collision settings in WorldGenerator
+
+**Issue**: Cannot move character
+**Solution**: 
+- Verify input mappings in Project Settings > Input
+- Check that WorldPlayerCharacter is set as default pawn
+
+## Next Steps
+
+1. **Add More Detail**: Modify WorldGenerator.cpp to add more complex terrain features
+2. **Create Biomes**: Implement different terrain types (forests, deserts, mountains)
+3. **Add Vegetation**: Create a vegetation spawning system
+4. **Implement LOD**: Add level-of-detail for large worlds
+5. **Add Game Mechanics**: Implement combat, inventory, quests, etc.
+6. **Optimize Performance**: Add culling, streaming, and chunk loading
+
+## Resources
+
+- [Unreal Engine Documentation](https://docs.unrealengine.com/)
+- [Procedural Mesh Component Guide](https://docs.unrealengine.com/5.4/en-US/API/Plugins/ProceduralMeshComponent/)
+- [C++ Programming Guide](https://docs.unrealengine.com/5.4/en-US/unreal-engine-cpp-quick-start/)
+
+## Getting Help
+
+If you encounter issues:
+1. Check the Output Log in the editor (Window > Developer Tools > Output Log)
+2. Review the README.md for project structure
+3. Check MATERIALS.md for material setup guidance
+4. Open an issue on GitHub with detailed error information
+
+Happy game development!
