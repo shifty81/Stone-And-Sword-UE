@@ -32,6 +32,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "World Generation")
 	void ClearWorld();
 
+	/** Set world generation parameters */
+	UFUNCTION(BlueprintCallable, Category = "World Generation")
+	void SetWorldParameters(int32 InWorldSizeX, int32 InWorldSizeY, float InGridResolution, float InHeightVariation);
+
 protected:
 	/** Procedural mesh component for the terrain */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "World Generation")

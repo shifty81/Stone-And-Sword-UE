@@ -100,8 +100,10 @@ void AWorldSetupManager::SpawnWorldGenerator()
 	{
 		// Configure the world generator with default values
 		WorldGenerator->SetActorLabel(TEXT("WorldGenerator_Auto"));
+		WorldGenerator->SetWorldParameters(DefaultWorldSizeX, DefaultWorldSizeY, DefaultGridResolution, DefaultHeightVariation);
 		
-		UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Spawned and configured WorldGenerator"));
+		UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Spawned and configured WorldGenerator with size (%d, %d), resolution %.1f, height variation %.1f"),
+			DefaultWorldSizeX, DefaultWorldSizeY, DefaultGridResolution, DefaultHeightVariation);
 	}
 	else
 	{
