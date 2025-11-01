@@ -60,6 +60,19 @@ After building successfully:
 
 ## Creating Your First World
 
+**New: Automatic Setup! (Fastest Method)**
+
+The project now includes an automatic world setup system:
+
+1. In the editor, go to **File > New Level**
+2. Select "Empty Level"
+3. Press Play (Alt+P)
+4. The world automatically generates with all necessary actors!
+
+**Manual Setup (For Full Control)**
+
+If you prefer manual control:
+
 ### 1. Create a New Level
 
 1. In the editor, go to **File > New Level**
