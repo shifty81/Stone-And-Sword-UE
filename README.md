@@ -1,151 +1,361 @@
-# Stone and Sword - Windows Game Application
+# Stone and Sword - Game Engine Project
 
-A standalone Windows game application built with Unreal Engine 5.4, featuring a procedural world generation system.
+## 🎮 Project Overview
 
-## Project Overview
+Stone and Sword is evolving from an Unreal Engine 5.4 project to a **custom C++ game engine** with **Lua scripting** support and modern rendering backends (**DirectX 11/12**, **Vulkan**, **OpenGL**).
 
-This is a standalone Windows game application that hosts the Unreal Engine 5.4 runtime with the following features:
-- Procedural flat world generation system
-- Third-person character controller with camera
-- Generic terrain textures (grass, stone, dirt)
-- Walking and exploration mechanics
-- Scalable world generation engine
+### Current State (Unreal Engine 5.4)
+- ✅ Procedural flat world generation system
+- ✅ Third-person character controller with camera
+- ✅ WASD movement, mouse look, jump mechanics
+- ✅ Generic terrain textures (grass, stone, dirt)
+- ✅ Walking and exploration mechanics
 
-## Project Structure
+### Target State (Custom Engine)
+- 🎯 C++ core engine with modular architecture
+- 🎯 Lua scripting for game logic
+- 🎯 Multiple rendering backends (DirectX 11/12, Vulkan, OpenGL)
+- 🎯 Entity Component System (ECS)
+- 🎯 Cross-platform potential
+- 🎯 Lightweight and performant
+- 🎯 Designed as a framework for building other games
+
+## 📚 Documentation
+
+This repository contains **comprehensive documentation** for transitioning to a custom engine:
+
+### Core Documentation
+
+1. **[ENGINE_ARCHITECTURE.md](ENGINE_ARCHITECTURE.md)** ⭐
+   - Complete architecture design
+   - System diagrams and data flow
+   - Technology stack
+   - Design patterns
+   - Performance considerations
+
+2. **[DEPENDENCIES.md](DEPENDENCIES.md)**
+   - Complete list of required libraries
+   - Version compatibility matrix
+   - Installation guide (vcpkg)
+   - License compliance information
+   - Platform requirements
+
+3. **[IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md)** ⭐
+   - Step-by-step implementation guide
+   - 9 phases from foundation to polish
+   - Complete code examples
+   - Best practices
+   - Timeline estimates (11-18 weeks)
+
+4. **[BUILD_GUIDE.md](BUILD_GUIDE.md)**
+   - Detailed build instructions
+   - CMake configuration
+   - Troubleshooting guide
+   - Build scripts
+   - Distribution packaging
+
+5. **[SCRIPTING_API.md](SCRIPTING_API.md)**
+   - Complete Lua API reference
+   - Engine bindings
+   - Component API
+   - Example scripts
+   - Best practices
+
+6. **[MIGRATION_CHECKLIST.md](MIGRATION_CHECKLIST.md)** ⭐
+   - Comprehensive functionality checklist
+   - Missing functionality analysis
+   - Priority matrix
+   - Effort estimates
+   - Success criteria
+
+### Legacy Documentation (Unreal Engine)
+
+- **[PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md)** - Original UE architecture
+- **[QUICKSTART.md](QUICKSTART.md)** - UE quick start guide
+- **[MATERIALS.md](MATERIALS.md)** - UE material guide
+- **[TESTING.md](TESTING.md)** - UE testing guide
+- **[CREATING_DEFAULT_MAP.md](CREATING_DEFAULT_MAP.md)** - UE map setup
+
+## 🏗️ Architecture Overview
+
+### Custom Engine Architecture
 
 ```
-StoneAndSword/
-├── Config/                 # Configuration files for engine, input, and game
-│   ├── DefaultEngine.ini   # Engine settings
-│   ├── DefaultGame.ini     # Game settings
-│   └── DefaultInput.ini    # Input mappings
-├── Content/                # Game content and assets
-│   ├── Maps/              # Game maps (MainWorld)
-│   ├── Textures/          # Texture assets (grass, stone, dirt, normal maps)
-│   ├── Materials/         # Material assets
-│   └── Blueprints/        # Blueprint assets
-├── Source/                 # C++ source code
-│   ├── StoneAndSword/     # Main game module
-│   │   ├── StoneAndSword.h/.cpp              # Module implementation
-│   │   ├── StoneAndSword.Build.cs            # Build configuration
-│   │   ├── StoneAndSwordGameModeBase.h/.cpp  # Game mode
-│   │   ├── WorldPlayerCharacter.h/.cpp       # Player character
-│   │   └── WorldGenerator.h/.cpp             # World generation system
-│   └── StoneAndSword.Target.cs           # Game build target
-└── StoneAndSword.uproject  # Unreal Engine project file
+┌─────────────────────────────────────────────────────────────────┐
+│                    STONE AND SWORD ENGINE                        │
+│            Custom C++ Game Engine with Lua Scripting             │
+└─────────────────────────────────────────────────────────────────┘
 
+                              ▼
+┌──────────────────────────────────────────────────────────────────┐
+│  Application Layer    │  Window, Game Loop, Event System         │
+├──────────────────────────────────────────────────────────────────┤
+│  Scripting Layer      │  Lua 5.4 + LuaBridge3                    │
+├──────────────────────────────────────────────────────────────────┤
+│  Game Systems         │  ECS, World Gen, Character, Physics      │
+├──────────────────────────────────────────────────────────────────┤
+│  Rendering Layer      │  Renderer Interface, Materials, Meshes   │
+├──────────────────────────────────────────────────────────────────┤
+│  Graphics Backends    │  DirectX 11/12, Vulkan, OpenGL           │
+├──────────────────────────────────────────────────────────────────┤
+│  Platform Layer       │  Windows API, File I/O, Threading        │
+└──────────────────────────────────────────────────────────────────┘
 ```
 
-## Key Systems
+### Key Features
 
-### World Generation System
-The `AWorldGenerator` class provides procedural terrain generation:
-- **Flat terrain with height variation**: Creates a walkable surface with subtle undulation
-- **Configurable parameters**:
-  - World size (X and Y dimensions)
-  - Grid resolution (vertex spacing)
-  - Height variation (terrain undulation)
-  - Noise scale (terrain detail)
-  - Random seed (for reproducible worlds)
-- **Auto-generation**: Can automatically generate terrain on level start
-- **Material support**: Apply custom materials to the terrain
+- 🎨 **Multiple Rendering Backends**
+  - DirectX 11 (primary)
+  - DirectX 12 (modern)
+  - Vulkan (cross-platform)
+  - OpenGL (compatibility)
 
-### Character Controller
-The `AWorldPlayerCharacter` class provides player control:
-- **Third-person camera** with spring arm for smooth following
-- **WASD movement** with mouse look
-- **Jump capability**
-- **Gamepad support**
-- **Configurable movement speed**
+- 🔧 **Modern C++ Core**
+  - C++17/20 standards
+  - Entity Component System
+  - Smart pointers and RAII
+  - Multi-threaded architecture
 
-### Input Mappings
-- **W/S**: Move forward/backward
-- **A/D**: Move left/right
-- **Mouse**: Look around
-- **Spacebar**: Jump
-- **Gamepad**: Full controller support
+- 📝 **Lua Scripting**
+  - High-level game logic
+  - Hot-reloadable scripts
+  - Full engine API access
+  - Easy prototyping
 
-## Getting Started
+- 🌍 **Procedural World Generation**
+  - Port of existing UE system
+  - Configurable terrain
+  - Noise-based height maps
+  - Material splatting
 
-### Prerequisites
-- Unreal Engine 5.4 or later
-- Visual Studio 2022 (Windows)
-- Git
-- Windows operating system
+- 🎮 **Character Controller**
+  - WASD movement
+  - Mouse look
+  - Jump mechanics
+  - Gamepad support
 
-### Building the Windows Application
+## 🚀 Quick Start
 
-1. Clone this repository
-2. Navigate to the project directory
-3. Right-click `StoneAndSword.uproject` and select "Generate Visual Studio project files"
-4. Open `StoneAndSword.sln` in Visual Studio
-5. Build the project in "Development" or "Shipping" configuration
-6. Run the standalone game application
+### Option 1: Use Existing Unreal Engine Project
 
-### Running the Game
+```bash
+# Clone repository
+git clone https://github.com/shifty81/Stone-And-Sword-UE.git
+cd Stone-And-Sword-UE
 
-**Option 1: From Visual Studio**
-- Set configuration to "Development" or "Shipping"
-- Press F5 to build and launch the game
+# Open in Unreal Engine
+# Double-click StoneAndSword.uproject
 
-**Option 2: From Unreal Engine**
-- Double-click `StoneAndSword.uproject`
-- Click "Play" (Alt+P) to test in the engine
-- Use "Package Project > Windows" to create a standalone executable
+# Or generate Visual Studio project
+# Right-click StoneAndSword.uproject > Generate Visual Studio project files
+```
 
-**Option 3: Standalone Executable**
-- After packaging, find the executable in the `Binaries/Win64` directory
-- Double-click to run the game directly
+### Option 2: Start Custom Engine Development
 
-## Game Features
+```bash
+# 1. Read the documentation
+# Start with ENGINE_ARCHITECTURE.md and IMPLEMENTATION_GUIDE.md
 
-The standalone Windows application automatically initializes with:
-- **Auto-generated world**: Procedurally generated terrain on game start
-- **Player character**: Ready-to-play third-person character
-- **Full controls**: WASD movement, mouse look, spacebar jump
-- **Gamepad support**: Xbox/PlayStation controller compatible
+# 2. Install dependencies
+# See DEPENDENCIES.md for complete list
 
-## Textures
+# 3. Follow implementation guide
+# IMPLEMENTATION_GUIDE.md provides step-by-step instructions
 
-The game includes procedurally generated textures in `Content/Textures/`:
-- **T_Grass.tga**: Green grass texture with natural variation
-- **T_Stone.tga**: Gray stone texture for rocky areas
-- **T_Dirt.tga**: Brown dirt texture for terrain
-- **T_Normal.tga**: Default normal map for flat surfaces
+# 4. Build with CMake
+# See BUILD_GUIDE.md for build instructions
+```
 
-These textures can be used as a starting point and can be replaced with higher-quality assets as needed.
+## 📋 Implementation Roadmap
 
-## Customization
+### Phase 1: Foundation (Weeks 1-4) ✅ Planned
+- Project structure and CMake setup
+- Core engine framework
+- Window management
+- Game loop
 
-### Extending Game Features
-The application can be extended with:
-- More complex terrain algorithms (Perlin noise, biomes, etc.)
-- Additional game mechanics and systems
-- New player abilities and interactions
-- Enhanced graphics and visual effects
+### Phase 2: Rendering (Weeks 5-8) ✅ Planned
+- Rendering abstraction layer
+- DirectX 11 backend
+- Mesh and shader support
+- Basic material system
 
-### Modifying the Source Code
-1. Edit C++ classes in `Source/StoneAndSword/`
-2. Rebuild the project in Visual Studio
-3. Test changes by running the game
+### Phase 3: Scripting (Weeks 9-10) ✅ Planned
+- Lua integration
+- C++ ↔ Lua bindings
+- Script loading and execution
+- Hot-reloading
 
-### Building for Distribution
-1. Open the project in Unreal Engine
-2. Go to File > Package Project > Windows
-3. Choose a target directory
-4. Wait for packaging to complete
-5. Distribute the packaged application
+### Phase 4: ECS (Weeks 11-13) ✅ Planned
+- Entity Component System
+- Common components (Transform, MeshRenderer, Camera)
+- System architecture
+- Component storage
 
-## Build Configurations
+### Phase 5: World Generation (Weeks 14-15) ✅ Planned
+- Port from Unreal Engine
+- Terrain mesh generation
+- Height calculation
+- Material application
 
-- **Development**: For development and testing with debugging symbols
-- **DebugGame**: For deep debugging with full debug information
-- **Shipping**: For final release builds (optimized, no debug info)
+### Phase 6: Character Controller (Weeks 16-17) ✅ Planned
+- Port from Unreal Engine
+- Movement physics
+- Camera system
+- Input handling
 
-## License
+### Phase 7: Polish (Week 18) ✅ Planned
+- Bug fixes
+- Optimization
+- Documentation updates
+- Example projects
 
-See LICENSE file for details.
+## 🎯 Goals and Benefits
 
-## Contributing
+### Why Custom Engine?
 
-This is a standalone Windows game application designed to be extended and customized for your specific requirements.
+1. **Full Control**
+   - Complete control over architecture
+   - No engine overhead
+   - Tailored to specific needs
+
+2. **Lightweight**
+   - Smaller binary size
+   - Faster compilation
+   - Lower memory footprint
+
+3. **Learning**
+   - Deep understanding of game engines
+   - Graphics programming skills
+   - Architecture design experience
+
+4. **Flexibility**
+   - Lua scripting for rapid iteration
+   - Multiple rendering backends
+   - Easy to extend
+
+5. **Game Creation Platform**
+   - Designed to host multiple games
+   - API for game developers
+   - Reusable components
+
+### Current Unreal Engine Features (To Port)
+
+- ✅ Procedural world generation
+- ✅ Character controller with camera
+- ✅ Input system (keyboard, mouse, gamepad)
+- ✅ Material system
+- ✅ Configuration files
+- ✅ Auto-setup system
+
+## 📦 Dependencies
+
+### Essential (MVP)
+- Visual Studio 2022
+- CMake 3.20+
+- Windows SDK 10.0.19041+
+- Lua 5.4.6
+- LuaBridge3
+- GLM (mathematics)
+- stb_image (image loading)
+
+### Optional
+- Vulkan SDK (Vulkan backend)
+- GLFW (windowing)
+- OpenAL Soft (audio)
+- PhysX (physics)
+- Assimp (model loading)
+
+See **[DEPENDENCIES.md](DEPENDENCIES.md)** for complete list and installation guide.
+
+## 🛠️ Technology Stack
+
+### Core
+- **Language**: C++17/20
+- **Build System**: CMake 3.20+
+- **Compiler**: MSVC 2019+
+
+### Scripting
+- **Language**: Lua 5.4+
+- **Binding**: LuaBridge3 or Sol2
+
+### Graphics
+- **DirectX 11**: Windows compatibility
+- **DirectX 12**: Modern Windows
+- **Vulkan**: Cross-platform, modern
+- **OpenGL 4.5+**: Maximum compatibility
+
+### Libraries
+- **GLM**: Mathematics
+- **stb_image**: Image loading
+- **spdlog**: Logging
+- **nlohmann/json**: Configuration
+
+## 📊 Effort Estimates
+
+| Component | Effort | Priority |
+|-----------|--------|----------|
+| Core Engine | 2-3 weeks | CRITICAL |
+| DirectX 11 | 2-3 weeks | CRITICAL |
+| Lua Scripting | 1-2 weeks | CRITICAL |
+| ECS System | 2-3 weeks | CRITICAL |
+| World Gen Port | 1-2 weeks | CRITICAL |
+| Character Port | 1-2 weeks | CRITICAL |
+| Input System | 1 week | CRITICAL |
+| **MVP Total** | **11-18 weeks** | - |
+
+## 🎓 Learning Resources
+
+### For Engine Development
+1. [Game Engine Architecture by Jason Gregory](https://www.gameenginebook.com/)
+2. [Real-Time Rendering](https://www.realtimerendering.com/)
+3. [LearnOpenGL](https://learnopengl.com/)
+4. [Vulkan Tutorial](https://vulkan-tutorial.com/)
+
+### For Graphics APIs
+- **DirectX 11**: [Microsoft DirectX Documentation](https://docs.microsoft.com/en-us/windows/win32/directx)
+- **DirectX 12**: [DirectX 12 Programming Guide](https://docs.microsoft.com/en-us/windows/win32/direct3d12/directx-12-programming-guide)
+- **Vulkan**: [Vulkan Guide](https://github.com/KhronosGroup/Vulkan-Guide)
+- **OpenGL**: [docs.gl](https://docs.gl/)
+
+### For Lua Scripting
+- [Programming in Lua](https://www.lua.org/pil/)
+- [LuaBridge Documentation](https://github.com/kunitoki/LuaBridge3)
+
+## 🤝 Contributing
+
+This project is designed as a learning resource and game engine framework. Contributions are welcome!
+
+### How to Contribute
+1. Read the documentation thoroughly
+2. Follow the implementation guide
+3. Test your changes
+4. Submit pull requests with clear descriptions
+
+## 📄 License
+
+See [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- **Repository**: https://github.com/shifty81/Stone-And-Sword-UE
+- **Documentation**: See docs listed above
+- **Original UE Project**: Current `main` branch
+
+## 📞 Support
+
+For questions or issues:
+1. Check the comprehensive documentation
+2. Review troubleshooting sections in BUILD_GUIDE.md
+3. Open an issue on GitHub
+
+## 🎉 Status
+
+**Current**: Documentation complete ✅
+**Next**: Begin implementation following the guide
+
+All documentation has been created to guide the complete migration from Unreal Engine to a custom C++ game engine with Lua scripting. The project is ready for implementation!
+
+---
+
+**Note**: This project demonstrates the transition from a high-level engine (Unreal Engine) to a custom low-level engine, providing deep learning opportunities in game engine architecture, graphics programming, and systems design.
