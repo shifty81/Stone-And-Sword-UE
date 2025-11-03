@@ -74,8 +74,9 @@ The `AWorldPlayerCharacter` class provides player control:
 
 ### Prerequisites
 - Unreal Engine 5.4 or later
-- Visual Studio 2022 (for Windows) or appropriate C++ development tools
+- Visual Studio 2022 (Windows)
 - Git
+- Windows operating system
 
 ### Quick Start for Testing
 

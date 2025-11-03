@@ -7,8 +7,9 @@ This guide will help you quickly get started with the Stone and Sword open world
 Before you begin, ensure you have:
 
 1. **Unreal Engine 5.4** installed from Epic Games Launcher
-2. **Visual Studio 2022** (Windows) or **Xcode** (macOS) with C++ development tools
+2. **Visual Studio 2022** (Windows) with C++ development tools
 3. **Git** for version control
+4. **Windows operating system**
 
 ## Step-by-Step Setup
 
@@ -26,12 +27,6 @@ cd Stone-And-Sword-UE
 - Select "Generate Visual Studio project files"
 - Wait for the process to complete
 
-**macOS/Linux:**
-```bash
-# Path to your UE installation
-/path/to/UnrealEngine/Engine/Build/BatchFiles/Mac/GenerateProjectFiles.sh -project="/path/to/StoneAndSword.uproject" -game
-```
-
 ### 3. Build the Project
 
 **Option A: Using Visual Studio (Windows)**
@@ -44,12 +39,6 @@ cd Stone-And-Sword-UE
 ```bash
 # Windows
 "C:\Program Files\Epic Games\UE_5.4\Engine\Build\BatchFiles\Build.bat" StoneAndSwordEditor Win64 Development -Project="StoneAndSword.uproject"
-
-# macOS
-/Users/Shared/Epic\ Games/UE_5.4/Engine/Build/BatchFiles/Mac/Build.sh StoneAndSwordEditor Mac Development -Project="StoneAndSword.uproject"
-
-# Linux
-/home/user/UnrealEngine/Engine/Build/BatchFiles/Linux/Build.sh StoneAndSwordEditor Linux Development -Project="StoneAndSword.uproject"
 ```
 
 ### 4. Open the Editor
