@@ -220,7 +220,7 @@ UObject (Unreal Engine Base)
 - **Engine**: Unreal Engine 5.4
 - **Language**: C++ (with Blueprint support)
 - **Build System**: Unreal Build Tool
-- **Target Platforms**: Windows, Linux (configurable for more)
+- **Target Platform**: Windows
 - **Key Plugins**:
   - ProceduralMeshComponent
   - Landmass
