@@ -1,10 +1,10 @@
-# Stone and Sword - Open World Game
+# Stone and Sword - Windows Game Application
 
-An open world game project built with Unreal Engine 5.4, featuring a procedural world generation system.
+A standalone Windows game application built with Unreal Engine 5.4, featuring a procedural world generation system.
 
 ## Project Overview
 
-This project provides a structured foundation for an open world game with the following features:
+This is a standalone Windows game application that hosts the Unreal Engine 5.4 runtime with the following features:
 - Procedural flat world generation system
 - Third-person character controller with camera
 - Generic terrain textures (grass, stone, dirt)
@@ -15,11 +15,10 @@ This project provides a structured foundation for an open world game with the fo
 
 ```
 StoneAndSword/
-├── Config/                 # Configuration files for engine, input, and editor
+├── Config/                 # Configuration files for engine, input, and game
 │   ├── DefaultEngine.ini   # Engine settings
 │   ├── DefaultGame.ini     # Game settings
-│   ├── DefaultInput.ini    # Input mappings
-│   └── DefaultEditor.ini   # Editor settings
+│   └── DefaultInput.ini    # Input mappings
 ├── Content/                # Game content and assets
 │   ├── Maps/              # Game maps (MainWorld)
 │   ├── Textures/          # Texture assets (grass, stone, dirt, normal maps)
@@ -32,11 +31,7 @@ StoneAndSword/
 │   │   ├── StoneAndSwordGameModeBase.h/.cpp  # Game mode
 │   │   ├── WorldPlayerCharacter.h/.cpp       # Player character
 │   │   └── WorldGenerator.h/.cpp             # World generation system
-│   ├── StoneAndSwordEditor/  # Editor module
-│   │   ├── StoneAndSwordEditor.h/.cpp     # Editor module implementation
-│   │   └── StoneAndSwordEditor.Build.cs   # Editor build configuration
-│   ├── StoneAndSword.Target.cs           # Game build target
-│   └── StoneAndSwordEditor.Target.cs     # Editor build target
+│   └── StoneAndSword.Target.cs           # Game build target
 └── StoneAndSword.uproject  # Unreal Engine project file
 
 ```
@@ -78,43 +73,41 @@ The `AWorldPlayerCharacter` class provides player control:
 - Git
 - Windows operating system
 
-### Quick Start for Testing
+### Building the Windows Application
 
-**The fastest way to test the world generation system:**
-
-1. Clone this repository
-2. Open `StoneAndSword.uproject` in Unreal Engine 5.4
-3. Create a new Empty Level (File > New Level > Empty Level)
-4. Press Play (Alt+P)
-5. The world will automatically generate with all necessary components!
-
-See **TESTING.md** for detailed testing instructions and customization options.
-
-### Full Setup for Development
-
-### Opening the Project
 1. Clone this repository
 2. Navigate to the project directory
 3. Right-click `StoneAndSword.uproject` and select "Generate Visual Studio project files"
 4. Open `StoneAndSword.sln` in Visual Studio
-5. Build the project (Development Editor configuration)
-6. Launch the editor from Visual Studio or by double-clicking the .uproject file
+5. Build the project in "Development" or "Shipping" configuration
+6. Run the standalone game application
 
-### Creating Your First World
-1. Open the Unreal Editor
-2. Create a new level or open an existing one
-3. Add a `WorldGenerator` actor to the level (Place Actors panel > All Classes > WorldGenerator)
-4. Configure the world generation parameters in the Details panel:
-   - Adjust `World Size X` and `World Size Y` for terrain dimensions
-   - Modify `Grid Resolution` for detail level
-   - Set `Height Variation` for terrain undulation
-   - Configure `Auto Generate On Begin Play` to generate at runtime
-5. Add a `WorldPlayerCharacter` or use the default game mode
-6. Press Play to explore your generated world
+### Running the Game
+
+**Option 1: From Visual Studio**
+- Set configuration to "Development" or "Shipping"
+- Press F5 to build and launch the game
+
+**Option 2: From Unreal Engine**
+- Double-click `StoneAndSword.uproject`
+- Click "Play" (Alt+P) to test in the engine
+- Use "Package Project > Windows" to create a standalone executable
+
+**Option 3: Standalone Executable**
+- After packaging, find the executable in the `Binaries/Win64` directory
+- Double-click to run the game directly
+
+## Game Features
+
+The standalone Windows application automatically initializes with:
+- **Auto-generated world**: Procedurally generated terrain on game start
+- **Player character**: Ready-to-play third-person character
+- **Full controls**: WASD movement, mouse look, spacebar jump
+- **Gamepad support**: Xbox/PlayStation controller compatible
 
 ## Textures
 
-The project includes procedurally generated textures in `Content/Textures/`:
+The game includes procedurally generated textures in `Content/Textures/`:
 - **T_Grass.tga**: Green grass texture with natural variation
 - **T_Stone.tga**: Gray stone texture for rocky areas
 - **T_Dirt.tga**: Brown dirt texture for terrain
@@ -124,26 +117,30 @@ These textures can be used as a starting point and can be replaced with higher-q
 
 ## Customization
 
-### Extending the World Generator
-To add more complex terrain features:
-1. Modify `WorldGenerator.cpp` and `WorldGenerator.h`
-2. Add new generation algorithms (Perlin noise, biomes, etc.)
-3. Implement LOD system for large worlds
-4. Add vegetation spawning
-5. Implement chunk-based streaming for infinite worlds
+### Extending Game Features
+The application can be extended with:
+- More complex terrain algorithms (Perlin noise, biomes, etc.)
+- Additional game mechanics and systems
+- New player abilities and interactions
+- Enhanced graphics and visual effects
 
-### Adding Game Features
-The project structure supports easy extension:
-- Add new C++ classes in `Source/StoneAndSword/`
-- Create Blueprints in `Content/Blueprints/`
-- Implement game-specific mechanics in the game mode
-- Add UI using UMG widgets
+### Modifying the Source Code
+1. Edit C++ classes in `Source/StoneAndSword/`
+2. Rebuild the project in Visual Studio
+3. Test changes by running the game
 
-## Build Targets
+### Building for Distribution
+1. Open the project in Unreal Engine
+2. Go to File > Package Project > Windows
+3. Choose a target directory
+4. Wait for packaging to complete
+5. Distribute the packaged application
 
-- **Development**: For development and testing
-- **DebugGame**: For debugging
-- **Shipping**: For final release builds
+## Build Configurations
+
+- **Development**: For development and testing with debugging symbols
+- **DebugGame**: For deep debugging with full debug information
+- **Shipping**: For final release builds (optimized, no debug info)
 
 ## License
 
@@ -151,4 +148,4 @@ See LICENSE file for details.
 
 ## Contributing
 
-This is a foundation project designed to be extended and customized for your specific game requirements.
+This is a standalone Windows game application designed to be extended and customized for your specific requirements.

@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-This guide will help you quickly get started with the Stone and Sword open world project.
+This guide will help you quickly get started building and running the Stone and Sword standalone Windows game application.
 
 ## Prerequisites
 
@@ -31,36 +31,58 @@ cd Stone-And-Sword-UE
 
 **Option A: Using Visual Studio (Windows)**
 1. Open `StoneAndSword.sln`
-2. Select "Development Editor" configuration
+2. Select "Development" or "Shipping" configuration
 3. Set "StoneAndSword" as the startup project
-4. Press F5 or click "Local Windows Debugger"
+4. Press F5 or click "Local Windows Debugger" to build and run
 
 **Option B: Using Command Line**
 ```bash
 # Windows
-"C:\Program Files\Epic Games\UE_5.4\Engine\Build\BatchFiles\Build.bat" StoneAndSwordEditor Win64 Development -Project="StoneAndSword.uproject"
+"C:\Program Files\Epic Games\UE_5.4\Engine\Build\BatchFiles\Build.bat" StoneAndSword Win64 Development -Project="StoneAndSword.uproject"
 ```
 
-### 4. Open the Editor
+### 4. Run the Game
 
+**Standalone Application:**
 After building successfully:
+- Run from Visual Studio by pressing F5
+- Or find the executable in `Binaries/Win64/StoneAndSword.exe` and double-click to run
+
+**Testing in Unreal Editor (Optional):**
 - Double-click `StoneAndSword.uproject` to open the Unreal Editor
-- Or launch from Visual Studio
+- Press Play (Alt+P) to test the game
+- Use "Package Project > Windows" to create a distributable build
 
-## Creating Your First World
+## Running Your First Game
 
-**New: Automatic Setup! (Fastest Method)**
+**Automatic World Generation:**
 
-The project now includes an automatic world setup system:
+When you run the standalone game application:
 
-1. In the editor, go to **File > New Level**
-2. Select "Empty Level"
-3. Press Play (Alt+P)
-4. The world automatically generates with all necessary actors!
+1. The game launches automatically
+2. The world generator creates the procedural terrain
+3. The player character spawns in the world
+4. You can immediately start playing!
 
-**Manual Setup (For Full Control)**
+**Controls:**
+- **WASD**: Move around
+- **Mouse**: Look around
+- **Spacebar**: Jump
+- **ESC**: Quit game
 
-If you prefer manual control:
+**Testing Different Worlds (Using Editor):**
+
+If you want to customize the world before building:
+
+1. Open the project in the Unreal Editor
+2. Create a new level or open an existing one
+3. Add actors and configure settings
+4. Save the level
+5. Rebuild the game to include your changes
+
+**Advanced Customization (Manual Setup):**
+
+For developers who want full control over the world:
 
 ### 1. Create a New Level
 
@@ -107,43 +129,74 @@ If you prefer manual control:
 4. Use **Mouse** to look around
 5. Press **Spacebar** to jump
 
-## Creating Materials
+## Building for Distribution
 
-### Basic Terrain Material
+### Creating a Standalone Executable
 
-1. In Content Browser, navigate to `Content/Materials`
-2. Right-click and select **Material**
-3. Name it `M_Terrain`
-4. Open the material editor
-5. Add nodes:
+1. Open the project in Unreal Engine 5.4
+2. Go to **File > Package Project > Windows > Windows (64-bit)**
+3. Choose an output directory
+4. Wait for packaging to complete (this may take several minutes)
+5. Find the executable in the output directory
+6. Distribute the entire packaged folder to end users
+
+### Build Configurations
+
+- **Development**: For testing with debugging capabilities
+- **DebugGame**: For deep debugging with full symbols
+- **Shipping**: For final release (optimized, smallest size, no debug features)
+
+## Customizing the Game
+
+### Modifying Game Code
+
+1. Open the project in Visual Studio
+2. Edit C++ files in `Source/StoneAndSword/`
+3. Rebuild the project
+4. Run the game to test your changes
+5. Package for distribution when ready
+
+### Creating Materials (Optional)
+
+If you want to customize materials using the editor:
+
+1. Open the project in Unreal Editor
+2. In Content Browser, navigate to `Content/Materials`
+3. Right-click and select **Material**
+4. Name it `M_Terrain`
+5. Open the material editor
+6. Add nodes:
    - Texture Sample (T_Grass)
    - Connect to Base Color
-6. Save and compile
+7. Save and compile
 
-### Apply Material to World Generator
+### Apply Material to World Generator (Optional)
 
-1. Select the WorldGenerator in the level
-2. In Details panel, find "Terrain Material"
-3. Select `M_Terrain`
-4. Play again to see textured terrain
+To apply custom materials:
 
-## Customizing the World
+1. Open the level in Unreal Editor
+2. Select the WorldGenerator in the level
+3. In Details panel, find "Terrain Material"
+4. Select `M_Terrain`
+5. Rebuild and run the game to see textured terrain
 
-### Adjust Terrain Settings
+## Adjusting Game Settings
 
-Select WorldGenerator and modify:
+### Terrain Configuration
+
+Edit settings in WorldGenerator class or via the editor:
 - **World Size**: Increase for larger worlds
 - **Grid Resolution**: Decrease for more detail (warning: affects performance)
 - **Height Variation**: Increase for more dramatic terrain
 - **Noise Scale**: Adjust for different terrain patterns
 - **Random Seed**: Change to generate different terrain layouts
 
-### Character Movement
+### Character Settings
 
-The character settings can be adjusted in the WorldPlayerCharacter blueprint:
-- Movement speed: Edit `MaxWalkSpeed` in Character Movement
+Modify character behavior in WorldPlayerCharacter class:
+- Movement speed: Edit `MaxWalkSpeed` in Character Movement component
 - Camera distance: Edit `TargetArmLength` in Camera Boom
-- Jump height: Edit `JumpZVelocity` in Character Movement
+- Jump height: Edit `JumpZVelocity` in Character Movement component
 
 ## Common Issues
 
