@@ -4,17 +4,17 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    STONE AND SWORD PROJECT                       │
-│                   Unreal Engine 5.4 Game                        │
+│              STONE AND SWORD - WINDOWS APPLICATION              │
+│             Standalone Game with Unreal Engine 5.4              │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────┐
-│                        RUNTIME MODULES                            │
+│                        RUNTIME MODULE                             │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                   │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │         StoneAndSword Game Module                        │    │
-│  │  (Runs in both Editor and Standalone Game)              │    │
+│  │  (Standalone Windows Application Runtime)               │    │
 │  ├─────────────────────────────────────────────────────────┤    │
 │  │                                                           │    │
 │  │  AStoneAndSwordGameModeBase                             │    │
@@ -34,15 +34,6 @@
 │  │  ├── Noise-based height calculation                     │    │
 │  │  └── UV mapping and vertex colors                        │    │
 │  │                                                           │    │
-│  └─────────────────────────────────────────────────────────┘    │
-│                                                                   │
-│  ┌─────────────────────────────────────────────────────────┐    │
-│  │      StoneAndSwordEditor Module                          │    │
-│  │  (Only runs in Unreal Editor)                           │    │
-│  ├─────────────────────────────────────────────────────────┤    │
-│  │  - Editor customizations                                 │    │
-│  │  - Custom tools and utilities                            │    │
-│  │  - Asset import/export extensions                        │    │
 │  └─────────────────────────────────────────────────────────┘    │
 │                                                                   │
 └──────────────────────────────────────────────────────────────────┘
@@ -75,8 +66,7 @@
 │  Config/                                                          │
 │  ├── DefaultEngine.ini  - Engine settings, rendering, physics    │
 │  ├── DefaultGame.ini    - Game-specific settings                 │
-│  ├── DefaultInput.ini   - Input mappings and controls            │
-│  └── DefaultEditor.ini  - Editor preferences and packaging       │
+│  └── DefaultInput.ini   - Input mappings and controls            │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -158,6 +148,12 @@ UObject (Unreal Engine Base)
 
 ## Key Features
 
+### 🎮 Standalone Windows Application
+- **Self-contained game**: Runs independently without editor dependencies
+- **Optimized runtime**: Focused on game performance and execution
+- **Easy distribution**: Package and distribute as a standalone executable
+- **Windows native**: Built specifically for Windows platform
+
 ### 🌍 World Generation System
 - **Procedural Mesh Generation**: Uses UProceduralMeshComponent for runtime terrain
 - **Configurable Parameters**: Size, resolution, height, noise scale, random seed
@@ -177,10 +173,11 @@ UObject (Unreal Engine Base)
 - **Material Support**: Apply custom materials to terrain
 
 ### 🔧 Development Features
-- **Modular Architecture**: Separate game and editor modules
+- **Modular Architecture**: Clean game runtime module structure
 - **C++ and Blueprint**: Full support for both workflows
 - **Well-Documented**: Comprehensive guides and comments
 - **Standard UE Conventions**: Follows Epic's coding standards
+- **Standalone Builds**: Optimized for shipping and distribution
 
 ## Performance Considerations
 
@@ -217,10 +214,11 @@ UObject (Unreal Engine Base)
 
 ## Technology Stack
 
-- **Engine**: Unreal Engine 5.4
+- **Platform**: Windows (standalone application)
+- **Engine**: Unreal Engine 5.4 Runtime
 - **Language**: C++ (with Blueprint support)
 - **Build System**: Unreal Build Tool
-- **Target Platform**: Windows
+- **Target**: Windows 64-bit
 - **Key Plugins**:
   - ProceduralMeshComponent
   - Landmass

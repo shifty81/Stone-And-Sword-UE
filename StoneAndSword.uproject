@@ -2,7 +2,7 @@
 	"FileVersion": 3,
 	"EngineAssociation": "5.4",
 	"Category": "Games",
-	"Description": "Open World Game with Procedural World Generation",
+	"Description": "Standalone Windows Game Application with Procedural World Generation",
 	"Modules": [
 		{
 			"Name": "StoneAndSword",
@@ -12,14 +12,6 @@
 				"Engine",
 				"CoreUObject",
 				"ProceduralMeshComponent"
-			]
-		},
-		{
-			"Name": "StoneAndSwordEditor",
-			"Type": "Editor",
-			"LoadingPhase": "PostEngineInit",
-			"AdditionalDependencies": [
-				"UnrealEd"
 			]
 		}
 	],
