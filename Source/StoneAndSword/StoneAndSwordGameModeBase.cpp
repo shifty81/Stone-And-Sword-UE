@@ -5,6 +5,8 @@
 #include "WorldSetupManager.h"
 #include "UObject/ConstructorHelpers.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogStoneAndSwordGameMode, Log, All);
+
 AStoneAndSwordGameModeBase::AStoneAndSwordGameModeBase()
 {
 	// Set default pawn class to our character
@@ -38,11 +40,11 @@ void AStoneAndSwordGameModeBase::StartPlay()
 
 		if (WorldSetupManager)
 		{
-			UE_LOG(LogTemp, Log, TEXT("GameMode: WorldSetupManager spawned successfully"));
+			UE_LOG(LogStoneAndSwordGameMode, Log, TEXT("WorldSetupManager spawned successfully"));
 		}
 		else
 		{
-			UE_LOG(LogTemp, Warning, TEXT("GameMode: Failed to spawn WorldSetupManager"));
+			UE_LOG(LogStoneAndSwordGameMode, Warning, TEXT("Failed to spawn WorldSetupManager"));
 		}
 	}
 }

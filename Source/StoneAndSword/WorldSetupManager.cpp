@@ -9,6 +9,8 @@
 #include "Components/SkyAtmosphereComponent.h"
 #include "EngineUtils.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogWorldSetupManager, Log, All);
+
 AWorldSetupManager::AWorldSetupManager()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -37,7 +39,7 @@ void AWorldSetupManager::BeginPlay()
 
 void AWorldSetupManager::SetupWorld()
 {
-	UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Setting up world..."));
+	UE_LOG(LogWorldSetupManager, Log, TEXT("Setting up world..."));
 
 	// Spawn WorldGenerator if needed
 	if (bSpawnWorldGenerator)
@@ -47,7 +49,7 @@ void AWorldSetupManager::SetupWorld()
 		for (TActorIterator<AWorldGenerator> It(GetWorld()); It; ++It)
 		{
 			bFoundWorldGenerator = true;
-			UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Found existing WorldGenerator"));
+			UE_LOG(LogWorldSetupManager, Log, TEXT("Found existing WorldGenerator"));
 			break;
 		}
 
@@ -69,7 +71,7 @@ void AWorldSetupManager::SetupWorld()
 		SetupSkyAtmosphere();
 	}
 
-	UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: World setup complete"));
+	UE_LOG(LogWorldSetupManager, Log, TEXT("World setup complete"));
 }
 
 void AWorldSetupManager::SpawnWorldGenerator()
@@ -77,7 +79,7 @@ void AWorldSetupManager::SpawnWorldGenerator()
 	UWorld* World = GetWorld();
 	if (!World)
 	{
-		UE_LOG(LogTemp, Error, TEXT("WorldSetupManager: Failed to get world"));
+		UE_LOG(LogWorldSetupManager, Error, TEXT("Failed to get world"));
 		return;
 	}
 
@@ -102,12 +104,12 @@ void AWorldSetupManager::SpawnWorldGenerator()
 		WorldGenerator->SetActorLabel(TEXT("WorldGenerator_Auto"));
 		WorldGenerator->SetWorldParameters(DefaultWorldSizeX, DefaultWorldSizeY, DefaultGridResolution, DefaultHeightVariation);
 		
-		UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Spawned and configured WorldGenerator with size (%d, %d), resolution %.1f, height variation %.1f"),
+		UE_LOG(LogWorldSetupManager, Log, TEXT("Spawned and configured WorldGenerator with size (%d, %d), resolution %.1f, height variation %.1f"),
 			DefaultWorldSizeX, DefaultWorldSizeY, DefaultGridResolution, DefaultHeightVariation);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("WorldSetupManager: Failed to spawn WorldGenerator"));
+		UE_LOG(LogWorldSetupManager, Error, TEXT("Failed to spawn WorldGenerator"));
 	}
 }
 
@@ -124,7 +126,7 @@ void AWorldSetupManager::SetupDirectionalLight()
 	for (TActorIterator<ADirectionalLight> It(World); It; ++It)
 	{
 		bFoundDirectionalLight = true;
-		UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Found existing Directional Light"));
+		UE_LOG(LogWorldSetupManager, Log, TEXT("Found existing Directional Light"));
 		break;
 	}
 
@@ -156,7 +158,7 @@ void AWorldSetupManager::SetupDirectionalLight()
 				LightComponent->SetLightColor(FLinearColor(1.0f, 0.95f, 0.9f));
 			}
 			
-			UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Spawned Directional Light"));
+			UE_LOG(LogWorldSetupManager, Log, TEXT("Spawned Directional Light"));
 		}
 	}
 }
@@ -174,7 +176,7 @@ void AWorldSetupManager::SetupSkyAtmosphere()
 	for (TActorIterator<ASkyLight> It(World); It; ++It)
 	{
 		bFoundSkyLight = true;
-		UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Found existing Sky Light"));
+		UE_LOG(LogWorldSetupManager, Log, TEXT("Found existing Sky Light"));
 		break;
 	}
 
@@ -206,7 +208,7 @@ void AWorldSetupManager::SetupSkyAtmosphere()
 				SkyLightComponent->RecaptureSky();
 			}
 			
-			UE_LOG(LogTemp, Log, TEXT("WorldSetupManager: Spawned Sky Light"));
+			UE_LOG(LogWorldSetupManager, Log, TEXT("Spawned Sky Light"));
 		}
 	}
 }

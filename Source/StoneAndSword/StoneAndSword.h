@@ -5,6 +5,10 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
+/**
+ * Stone and Sword game module interface.
+ * Manages module initialization and shutdown lifecycle.
+ */
 class FStoneAndSwordModule : public IModuleInterface
 {
 public:

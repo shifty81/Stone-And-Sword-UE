@@ -3,6 +3,8 @@
 #include "WorldGenerator.h"
 #include "KismetProceduralMeshLibrary.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogWorldGenerator, Log, All);
+
 AWorldGenerator::AWorldGenerator()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -43,6 +45,9 @@ void AWorldGenerator::Tick(float DeltaTime)
 
 void AWorldGenerator::GenerateWorld()
 {
+	UE_LOG(LogWorldGenerator, Log, TEXT("Generating world with size (%d, %d), resolution %.1f"), 
+		WorldSizeX, WorldSizeY, GridResolution);
+
 	ClearWorld();
 
 	TArray<FVector> Vertices;
@@ -60,10 +65,14 @@ void AWorldGenerator::GenerateWorld()
 	if (TerrainMaterial)
 	{
 		ProceduralMesh->SetMaterial(0, TerrainMaterial);
+		UE_LOG(LogWorldGenerator, Log, TEXT("Applied terrain material"));
 	}
 
 	// Enable collision
 	ProceduralMesh->ContainsPhysicsTriMeshData(true);
+	
+	UE_LOG(LogWorldGenerator, Log, TEXT("World generation complete: %d vertices, %d triangles"), 
+		Vertices.Num(), Triangles.Num() / 3);
 }
 
 void AWorldGenerator::ClearWorld()
@@ -149,7 +158,7 @@ void AWorldGenerator::GenerateTerrainMesh(TArray<FVector>& Vertices, TArray<int3
 	UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UVs, Normals, TArray<FProcMeshTangent>());
 }
 
-float AWorldGenerator::CalculateTerrainHeight(float X, float Y)
+float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
 {
 	// Simple Perlin-like noise using sine waves for height variation
 	float Height = 0.0f;

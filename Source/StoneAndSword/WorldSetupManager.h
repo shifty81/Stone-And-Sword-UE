@@ -7,8 +7,9 @@
 #include "WorldSetupManager.generated.h"
 
 /**
- * Manages automatic world setup for testing and development
- * Automatically spawns and configures necessary actors for the game world
+ * Manages automatic world setup for testing and development.
+ * Automatically spawns and configures necessary actors for the game world.
+ * Includes world generator, lighting, and sky atmosphere setup.
  */
 UCLASS()
 class STONEANDSWORD_API AWorldSetupManager : public AActor
