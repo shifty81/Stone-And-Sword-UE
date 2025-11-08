@@ -6,7 +6,7 @@ This guide will help you quickly get started building and running the Stone and 
 
 Before you begin, ensure you have:
 
-1. **Unreal Engine 5.4** installed from Epic Games Launcher
+1. **Unreal Engine 5.6.1** installed from Epic Games Launcher
 2. **Visual Studio 2022** (Windows) with C++ development tools
 3. **Git** for version control
 4. **Windows operating system**
@@ -38,7 +38,7 @@ cd Stone-And-Sword-UE
 **Option B: Using Command Line**
 ```bash
 # Windows
-"C:\Program Files\Epic Games\UE_5.4\Engine\Build\BatchFiles\Build.bat" StoneAndSword Win64 Development -Project="StoneAndSword.uproject"
+"C:\Program Files\Epic Games\UE_5.6\Engine\Build\BatchFiles\Build.bat" StoneAndSword Win64 Development -Project="StoneAndSword.uproject"
 ```
 
 ### 4. Run the Game
@@ -133,7 +133,7 @@ For developers who want full control over the world:
 
 ### Creating a Standalone Executable
 
-1. Open the project in Unreal Engine 5.4
+1. Open the project in Unreal Engine 5.6.1
 2. Go to **File > Package Project > Windows > Windows (64-bit)**
 3. Choose an output directory
 4. Wait for packaging to complete (this may take several minutes)
@@ -206,7 +206,7 @@ Modify character behavior in WorldPlayerCharacter class:
 **Solution**: Ensure the ProceduralMeshComponent plugin is enabled in the .uproject file
 
 **Issue**: Cannot generate project files
-**Solution**: Verify UE 5.4 is installed and associated with .uproject files
+**Solution**: Verify UE 5.6.1 is installed and associated with .uproject files
 
 ### Runtime Issues
 
@@ -239,8 +239,8 @@ Modify character behavior in WorldPlayerCharacter class:
 ## Resources
 
 - [Unreal Engine Documentation](https://docs.unrealengine.com/)
-- [Procedural Mesh Component Guide](https://docs.unrealengine.com/5.4/en-US/API/Plugins/ProceduralMeshComponent/)
-- [C++ Programming Guide](https://docs.unrealengine.com/5.4/en-US/unreal-engine-cpp-quick-start/)
+- [Procedural Mesh Component Guide](https://docs.unrealengine.com/5.6/en-US/API/Plugins/ProceduralMeshComponent/)
+- [C++ Programming Guide](https://docs.unrealengine.com/5.6/en-US/unreal-engine-cpp-quick-start/)
 
 ## Getting Help
 

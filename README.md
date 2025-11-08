@@ -4,7 +4,7 @@
 
 Stone and Sword is evolving from an Unreal Engine 5.4 project to a **custom C++ game engine** with **Lua scripting** support and modern rendering backends (**DirectX 11/12**, **Vulkan**, **OpenGL**).
 
-### Current State (Unreal Engine 5.4)
+### Current State (Unreal Engine 5.6.1)
 - ✅ Procedural flat world generation system
 - ✅ Third-person character controller with camera
 - ✅ WASD movement, mouse look, jump mechanics
