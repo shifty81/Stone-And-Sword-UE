@@ -3,11 +3,11 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class StoneAndSwordTarget : TargetRules
+public class StoneAndSwordEditorTarget : TargetRules
 {
-	public StoneAndSwordTarget(TargetInfo Target) : base(Target)
+	public StoneAndSwordEditorTarget(TargetInfo Target) : base(Target)
 	{
-		Type = TargetType.Game;
+		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
 		ExtraModuleNames.Add("StoneAndSword");
