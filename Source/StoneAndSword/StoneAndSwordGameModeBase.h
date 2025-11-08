@@ -7,7 +7,9 @@
 #include "StoneAndSwordGameModeBase.generated.h"
 
 /**
- * Game Mode for Stone and Sword open world game
+ * Game Mode for Stone and Sword open world game.
+ * Manages game rules, flow, and automatic world setup.
+ * Sets the default pawn to WorldPlayerCharacter.
  */
 UCLASS()
 class STONEANDSWORD_API AStoneAndSwordGameModeBase : public AGameModeBase
@@ -24,8 +26,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Setup")
 	bool bAutoSpawnWorldSetupManager;
 
+	/** Get the spawned world setup manager, if any */
+	UFUNCTION(BlueprintPure, Category = "World Setup")
+	AWorldSetupManager* GetWorldSetupManager() const { return WorldSetupManager; }
+
 private:
 	/** Reference to the spawned WorldSetupManager */
 	UPROPERTY()
-	class AWorldSetupManager* WorldSetupManager;
+	TObjectPtr<AWorldSetupManager> WorldSetupManager;
 };

@@ -7,7 +7,9 @@
 #include "WorldPlayerCharacter.generated.h"
 
 /**
- * Player character for exploring the open world
+ * Player character for exploring the open world.
+ * Provides third-person camera controls, WASD movement, and jump capability.
+ * Optimized for performance with tick disabled.
  */
 UCLASS()
 class STONEANDSWORD_API AWorldPlayerCharacter : public ACharacter
@@ -21,20 +23,27 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/** Get the camera component */
+	UFUNCTION(BlueprintPure, Category = "Camera")
+	UCameraComponent* GetCameraComponent() const { return CameraComponent; }
+
+	/** Get the camera boom component */
+	UFUNCTION(BlueprintPure, Category = "Camera")
+	USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
 protected:
 	/** Camera component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UCameraComponent* CameraComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UCameraComponent> CameraComponent;
 
 	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class USpringArmComponent* CameraBoom;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<USpringArmComponent> CameraBoom;
 
 	/** Movement speed multiplier */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float MovementSpeedMultiplier;
 
 	/** Called for forwards/backward input */

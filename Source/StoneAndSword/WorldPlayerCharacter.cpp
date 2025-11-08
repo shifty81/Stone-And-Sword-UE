@@ -8,7 +8,8 @@
 
 AWorldPlayerCharacter::AWorldPlayerCharacter()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	// Disable tick for better performance - this character doesn't need per-frame updates
+	PrimaryActorTick.bCanEverTick = false;
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -44,14 +45,15 @@ void AWorldPlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AWorldPlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
 void AWorldPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	// Validate input component
+	if (!PlayerInputComponent)
+	{
+		return;
+	}
 
 	// Set up gameplay key bindings
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);

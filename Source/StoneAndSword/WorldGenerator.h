@@ -8,7 +8,9 @@
 #include "WorldGenerator.generated.h"
 
 /**
- * Procedural world generator that creates a flat terrain for the open world
+ * Procedural world generator that creates terrain for the open world.
+ * Uses ProceduralMeshComponent to generate runtime terrain with configurable parameters.
+ * Supports auto-generation, custom materials, and physics collision.
  */
 UCLASS()
 class STONEANDSWORD_API AWorldGenerator : public AActor
@@ -36,10 +38,26 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "World Generation")
 	void SetWorldParameters(int32 InWorldSizeX, int32 InWorldSizeY, float InGridResolution, float InHeightVariation);
 
+	/** Get the current world size X */
+	UFUNCTION(BlueprintPure, Category = "World Generation")
+	int32 GetWorldSizeX() const { return WorldSizeX; }
+
+	/** Get the current world size Y */
+	UFUNCTION(BlueprintPure, Category = "World Generation")
+	int32 GetWorldSizeY() const { return WorldSizeY; }
+
+	/** Get the current grid resolution */
+	UFUNCTION(BlueprintPure, Category = "World Generation")
+	float GetGridResolution() const { return GridResolution; }
+
+	/** Get the current height variation */
+	UFUNCTION(BlueprintPure, Category = "World Generation")
+	float GetHeightVariation() const { return HeightVariation; }
+
 protected:
 	/** Procedural mesh component for the terrain */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "World Generation")
-	UProceduralMeshComponent* ProceduralMesh;
+	TObjectPtr<UProceduralMeshComponent> ProceduralMesh;
 
 	/** World size in units (X direction) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation", meta = (ClampMin = "100", ClampMax = "100000"))
@@ -71,7 +89,7 @@ protected:
 
 	/** Material to apply to the terrain */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation")
-	UMaterialInterface* TerrainMaterial;
+	TObjectPtr<UMaterialInterface> TerrainMaterial;
 
 private:
 	/** Generate mesh data for a flat terrain chunk */
@@ -80,5 +98,5 @@ private:
 							 TArray<FColor>& VertexColors);
 
 	/** Calculate terrain height at a given position */
-	float CalculateTerrainHeight(float X, float Y);
+	float CalculateTerrainHeight(float X, float Y) const;
 };
