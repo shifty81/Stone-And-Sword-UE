@@ -6,6 +6,9 @@
 #include "GameFramework/GameModeBase.h"
 #include "StoneAndSwordGameModeBase.generated.h"
 
+// Forward declaration
+class AWorldSetupManager;
+
 /**
  * Game Mode for Stone and Sword open world game.
  * Manages game rules, flow, and automatic world setup.

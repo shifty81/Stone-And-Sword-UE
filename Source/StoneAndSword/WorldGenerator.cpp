@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "WorldGenerator.h"
+#include "ProceduralMeshComponent.h"
 #include "KismetProceduralMeshLibrary.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWorldGenerator, Log, All);
