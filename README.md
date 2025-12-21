@@ -1,5 +1,7 @@
 # Stone and Sword - Game Engine Project
 
+> **📚 New to this project?** Check out **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** to find the right guide for you!
+
 ## 🚀 Quick Start (Get Playing in 10 Minutes!)
 
 **Want to get started right away?** See **[QUICK_START.md](QUICK_START.md)** for a fast-track guide to:
@@ -7,7 +9,8 @@
 - Create a playable scene with terrain, character, and controls
 - Test your first procedurally generated world
 
-**For comprehensive setup instructions**, see **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)**.
+**For comprehensive setup instructions**, see **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)**.  
+**To understand the full project**, see **[PROJECT_STATUS.md](PROJECT_STATUS.md)**.
 
 ## 🎮 Project Overview
 
