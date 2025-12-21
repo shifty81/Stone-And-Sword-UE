@@ -44,14 +44,20 @@ Stone and Sword is evolving from an Unreal Engine 5.4 project to a **custom C++ 
    - Test movement and controls
    - Minimal steps to get playing
 
-2. **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)** 📖
+2. **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** 🔧 **Build Issues?**
+   - Complete guide to fixing "StoneAndSword could not be compiled" errors
+   - Step-by-step solutions for all common build problems
+   - Automated build script included
+   - Prerequisites checklist and verification
+
+3. **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)** 📖
    - Comprehensive setup guide
    - Detailed explanations for each step
    - Adding proper animations and character models
    - Customization options
    - Troubleshooting guide
 
-3. **[QUICKSTART.md](QUICKSTART.md)** (Legacy)
+4. **[QUICKSTART.md](QUICKSTART.md)** (Legacy)
    - Original quick start guide
    - Building and packaging instructions
    - Advanced customization

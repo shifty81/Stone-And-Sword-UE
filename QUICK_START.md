@@ -28,6 +28,9 @@ This is the fastest way to get a playable scene running in Unreal Engine 5.6.
 7. Click **"Yes"** when prompted to rebuild modules
 8. Wait for compilation (2-5 minutes first time)
 
+> **⚠️ If compilation fails**, see **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** for detailed solutions.
+> You can also use the automated build script: `.\BuildProject.ps1`
+
 ## Step 2: Create the Default Map (5 minutes)
 
 ### A. Create Empty Level
@@ -104,7 +107,9 @@ This is the fastest way to get a playable scene running in Unreal Engine 5.6.
 - They should already be configured in `Config/DefaultInput.ini`
 
 ### Compile Errors?
-- Make sure Visual Studio 2022 is installed with C++ tools
+- See **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** for comprehensive solutions
+- Try the automated build script: `.\BuildProject.ps1 -Clean`
+- Make sure Visual Studio 2022 is installed with "Game development with C++" workload
 - Try closing UE, regenerating project files, and reopening
 
 ## What's Happening Automatically?

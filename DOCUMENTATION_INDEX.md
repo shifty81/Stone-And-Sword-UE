@@ -32,6 +32,7 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 | Document | Purpose | Time | When to Use |
 |----------|---------|------|-------------|
 | [QUICK_START.md](QUICK_START.md) | Get playing fast | 10 min | When you want immediate results |
+| [TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md) | Fix build errors | 5-30 min | When compilation fails |
 | [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) | Complete setup guide | 30-60 min | When you want to understand everything |
 | [VERIFICATION_CHECKLIST.md](VERIFICATION_CHECKLIST.md) | Verify everything works | 15 min | After setup to confirm success |
 
@@ -166,15 +167,22 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 
 ## 🆘 Troubleshooting Guide
 
+### Problem: Module rebuild fails / "StoneAndSword could not be compiled"
+1. See **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** - Complete build troubleshooting guide
+2. Try automated build script: `.\BuildProject.ps1 -Clean`
+3. Check [VERIFICATION_CHECKLIST.md](VERIFICATION_CHECKLIST.md) - Prerequisites section
+4. Verify Visual Studio 2022 with "Game development with C++" workload
+
 ### Problem: Project won't open
 1. Check [VERIFICATION_CHECKLIST.md](VERIFICATION_CHECKLIST.md) - Prerequisites section
 2. See [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) - "Project Won't Open" section
 3. Verify UE 5.6 is installed correctly
 
 ### Problem: Compile errors
-1. Check [VERIFICATION_CHECKLIST.md](VERIFICATION_CHECKLIST.md) - Compilation section
-2. See [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) - "Compile Errors" section
-3. Verify Visual Studio 2022 with C++ tools
+1. **First, see [TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** - Comprehensive solutions
+2. Check [VERIFICATION_CHECKLIST.md](VERIFICATION_CHECKLIST.md) - Compilation section
+3. See [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) - "Compile Errors" section
+4. Verify Visual Studio 2022 with C++ tools
 
 ### Problem: No terrain appears
 1. Check [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) - "No Terrain Appears" section
