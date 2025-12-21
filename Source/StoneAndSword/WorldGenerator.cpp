@@ -156,7 +156,8 @@ void AWorldGenerator::GenerateTerrainMesh(TArray<FVector>& Vertices, TArray<int3
 	}
 
 	// Calculate smooth normals
-	UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UVs, Normals, TArray<FProcMeshTangent>());
+	TArray<FProcMeshTangent> Tangents;
+	UKismetProceduralMeshLibrary::CalculateTangentsForMesh(Vertices, Triangles, UVs, Normals, Tangents);
 }
 
 float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
