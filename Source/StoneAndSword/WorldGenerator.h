@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ProceduralMeshComponent.h"
 #include "WorldGenerator.generated.h"
+
+// Forward declarations
+class UProceduralMeshComponent;
+class UMaterialInterface;
 
 /**
  * Procedural world generator that creates terrain for the open world.

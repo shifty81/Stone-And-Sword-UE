@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 #include "WorldPlayerCharacter.generated.h"
 
+// Forward declarations
+class UCameraComponent;
+class USpringArmComponent;
+
 /**
  * Player character for exploring the open world.
  * Provides third-person camera controls, WASD movement, and jump capability.
