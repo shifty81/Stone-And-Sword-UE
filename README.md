@@ -1,15 +1,26 @@
 # Stone and Sword - Game Engine Project
 
+## 🚀 Quick Start (Get Playing in 10 Minutes!)
+
+**Want to get started right away?** See **[QUICK_START.md](QUICK_START.md)** for a fast-track guide to:
+- Open the project in Unreal Engine 5.6
+- Create a playable scene with terrain, character, and controls
+- Test your first procedurally generated world
+
+**For comprehensive setup instructions**, see **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)**.
+
 ## 🎮 Project Overview
 
 Stone and Sword is evolving from an Unreal Engine 5.4 project to a **custom C++ game engine** with **Lua scripting** support and modern rendering backends (**DirectX 11/12**, **Vulkan**, **OpenGL**).
 
 ### Current State (Unreal Engine 5.6.1)
-- ✅ Procedural flat world generation system
+- ✅ Complete C++ source code for procedural world generation
 - ✅ Third-person character controller with camera
+- ✅ Automatic world setup system
 - ✅ WASD movement, mouse look, jump mechanics
-- ✅ Generic terrain textures (grass, stone, dirt)
-- ✅ Walking and exploration mechanics
+- ✅ Basic terrain textures (grass, stone, dirt, normal maps)
+- ✅ Ready to open in Unreal Engine 5.6 and start building
+- ⚠️ **Requires creating map and materials in Unreal Editor** (10-minute setup, see QUICK_START.md)
 
 ### Target State (Custom Engine)
 - 🎯 C++ core engine with modular architecture
@@ -22,9 +33,29 @@ Stone and Sword is evolving from an Unreal Engine 5.4 project to a **custom C++ 
 
 ## 📚 Documentation
 
-This repository contains **comprehensive documentation** for transitioning to a custom engine:
+### Getting Started with Unreal Engine 5.6
 
-### Core Documentation
+1. **[QUICK_START.md](QUICK_START.md)** ⚡ **START HERE!**
+   - 10-minute fast-track setup
+   - Create your first playable scene
+   - Test movement and controls
+   - Minimal steps to get playing
+
+2. **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)** 📖
+   - Comprehensive setup guide
+   - Detailed explanations for each step
+   - Adding proper animations and character models
+   - Customization options
+   - Troubleshooting guide
+
+3. **[QUICKSTART.md](QUICKSTART.md)** (Legacy)
+   - Original quick start guide
+   - Building and packaging instructions
+   - Advanced customization
+
+### Custom Engine Documentation
+
+This repository also contains **comprehensive documentation** for transitioning to a custom engine:
 
 1. **[ENGINE_ARCHITECTURE.md](ENGINE_ARCHITECTURE.md)** ⭐
    - Complete architecture design
