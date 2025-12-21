@@ -245,9 +245,56 @@ Check file sizes:
 - DLL should be 500KB - 5MB depending on build configuration
 - If file size is 0 or very small, the build failed
 
-## Manual Build Script
+## Automated Build Scripts (Included)
 
-Create this PowerShell script as `BuildProject.ps1` in your project folder:
+This repository includes automated build scripts to make building easier:
+
+### Option 1: Batch Script (Easiest for Windows)
+
+Simply double-click `BuildProject.bat` or run from command prompt:
+
+```cmd
+BuildProject.bat
+```
+
+This wrapper will automatically:
+- Find PowerShell (Core or Windows PowerShell)
+- Run the build script with proper execution policy
+- Display results and pause for you to see any errors
+
+### Option 2: PowerShell Script (More Options)
+
+For more control, use the PowerShell script directly:
+
+```powershell
+# Basic build (Development configuration)
+.\BuildProject.ps1
+
+# Clean build
+.\BuildProject.ps1 -Clean
+
+# Debug build
+.\BuildProject.ps1 -Configuration Debug
+
+# Custom UE path
+.\BuildProject.ps1 -UEPath "D:\Epic Games\UE_5.6"
+
+# Get help
+.\BuildProject.ps1 -Help
+```
+
+Features:
+- ✅ Auto-detects Unreal Engine installation
+- ✅ Generates Visual Studio project files
+- ✅ Compiles with verbose output
+- ✅ Verifies build output
+- ✅ Color-coded progress messages
+- ✅ Clean build option
+- ✅ Multiple configuration support
+
+## Manual Build Script (Alternative)
+
+If you prefer to create your own script, here's a template:
 
 ```powershell
 # BuildProject.ps1 - Manual build script for StoneAndSword

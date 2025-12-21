@@ -2,6 +2,8 @@
 
 > **📚 New to this project?** Check out **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** to find the right guide for you!
 
+> **🔧 Getting "StoneAndSword could not be compiled" error?** See **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** for solutions or use the automated build script: `.\BuildProject.ps1`
+
 ## 🚀 Quick Start (Get Playing in 10 Minutes!)
 
 **Want to get started right away?** See **[QUICK_START.md](QUICK_START.md)** for a fast-track guide to:
