@@ -43,7 +43,8 @@ If you see "StoneAndSword could not be compiled", try these solutions in order:
 ### Quick Fix #1: Use the Automated Build Script (Easiest)
 
 1. Close Unreal Editor (if open)
-2. In the project folder, double-click: **`BuildProject.bat`**
+2. In the project folder, double-click: **`BuildProject.bat`** (Windows users)
+   - Or run in PowerShell: `.\BuildProject.ps1` (for more options)
 3. Wait for it to complete (2-5 minutes)
 4. Double-click `StoneAndSword.uproject` again
 
@@ -91,7 +92,7 @@ Follow **[QUICK_START.md](QUICK_START.md)** to manually create:
 - A basic terrain material
 
 ### Option 2: Automated Setup (5 minutes)
-1. In Unreal Editor, open the Python console: **Tools → Execution Python Script**
+1. In Unreal Editor, open the Python console: **Tools → Execute Python Script**
 2. Or run: `py Content/Python/setup_project_assets.py`
 
 ## 📚 Additional Resources
@@ -106,7 +107,7 @@ Follow **[QUICK_START.md](QUICK_START.md)** to manually create:
 1. ✅ **Click "Yes"** when you see the "missing modules" prompt
 2. ✅ This is **normal behavior** for C++ projects
 3. ✅ Wait 2-5 minutes for compilation
-4. ✅ If it fails, use **`BuildProject.bat`** or see **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)**
+4. ✅ If it fails, use **`BuildProject.bat`** (or `.\BuildProject.ps1`) or see **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)**
 5. ✅ After successful build, follow **[QUICK_START.md](QUICK_START.md)** to create the level and material
 
 ---
