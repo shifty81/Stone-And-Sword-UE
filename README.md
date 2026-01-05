@@ -1,5 +1,7 @@
 # Stone and Sword - Game Engine Project
 
+> **⚠️ FIRST TIME OPENING THE PROJECT?** When you see "missing modules" prompt, **CLICK YES**! See **[FIRST_TIME_SETUP.md](FIRST_TIME_SETUP.md)** for what to do.
+
 > **❓ "Can I open this in Unreal Engine?"** YES! See **[WHATS_LEFT.md](WHATS_LEFT.md)** for exactly what you need to do (5-10 minutes of asset creation).
 
 > **📚 New to this project?** Check out **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** to find the right guide for you!

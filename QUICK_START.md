@@ -21,15 +21,21 @@ This is the fastest way to get a playable scene running in Unreal Engine 5.6.
 
 1. Clone or download this repository
 2. Navigate to the project folder
-3. **Right-click** on `StoneAndSword.uproject`
-4. Select **"Generate Visual Studio project files"**
-5. Wait for completion (30-60 seconds)
-6. **Double-click** `StoneAndSword.uproject` to open in Unreal Editor
-7. Click **"Yes"** when prompted to rebuild modules
-8. Wait for compilation (2-5 minutes first time)
+3. **Double-click** `StoneAndSword.uproject` to open in Unreal Editor
+4. When prompted **"Would you like to rebuild them now?"**, click **"Yes"**
+5. Wait for compilation (2-5 minutes first time)
 
+> **ℹ️ First time opening?** See **[FIRST_TIME_SETUP.md](FIRST_TIME_SETUP.md)** for detailed explanation of the "missing modules" prompt.
+>
 > **⚠️ If compilation fails**, see **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** for detailed solutions.
 > You can also use the automated build script: `.\BuildProject.ps1`
+
+**Alternative method (if you prefer to build manually first):**
+1. **Right-click** on `StoneAndSword.uproject`
+2. Select **"Generate Visual Studio project files"**
+3. Wait for completion (30-60 seconds)
+4. Open `StoneAndSword.sln` in Visual Studio and build
+5. Then **double-click** `StoneAndSword.uproject`
 
 ## Step 2: Create the Default Map (5 minutes)
 

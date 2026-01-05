@@ -4,6 +4,9 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 
 ## 🎯 Quick Navigation
 
+### I'm Opening the Project for the First Time! 🆕
+→ **[FIRST_TIME_SETUP.md](FIRST_TIME_SETUP.md)** - What to do when you see "missing modules" prompt
+
 ### I'm Wondering: "What's Left to Do?" ❓
 → **[WHATS_LEFT.md](WHATS_LEFT.md)** - Answers "what's needed to edit in Unreal Engine?"
 
@@ -37,6 +40,7 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 
 | Document | Purpose | Time | When to Use |
 |----------|---------|------|-------------|
+| [FIRST_TIME_SETUP.md](FIRST_TIME_SETUP.md) | Missing modules prompt | 2 min | **START HERE** - First time opening project |
 | [WHATS_LEFT.md](WHATS_LEFT.md) | What's needed for UE | 2 min | Answers: "Can I edit this project?" |
 | [Content/Python/README.md](Content/Python/README.md) | Automated asset creation | 5 min | When you want automatic setup |
 | [QUICK_START.md](QUICK_START.md) | Get playing fast | 10 min | When you want immediate results |
@@ -73,25 +77,33 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 
 ### First Time User - Fast Track (15 minutes total)
 
-1. **Read** [PROJECT_STATUS.md](PROJECT_STATUS.md) (5 min)
+1. **Read** [FIRST_TIME_SETUP.md](FIRST_TIME_SETUP.md) (2 min)
+   - Learn what to do when you see "missing modules" prompt
+   - Click "Yes" to rebuild
+   - Handle any build failures
+
+2. **Read** [PROJECT_STATUS.md](PROJECT_STATUS.md) (5 min)
    - Understand what's included
    - Know what you need to create
 
-2. **Follow** [QUICK_START.md](QUICK_START.md) (10 min)
+3. **Follow** [QUICK_START.md](QUICK_START.md) (10 min)
    - Open project in UE 5.6
    - Create basic assets
    - Press Play and test!
 
 ### First Time User - Thorough (60 minutes total)
 
-1. **Read** [PROJECT_STATUS.md](PROJECT_STATUS.md) (5 min)
+1. **Read** [FIRST_TIME_SETUP.md](FIRST_TIME_SETUP.md) (2 min)
+   - Understand the "missing modules" prompt
+
+2. **Read** [PROJECT_STATUS.md](PROJECT_STATUS.md) (5 min)
    - Get project overview
 
-2. **Verify** [VERIFICATION_CHECKLIST.md](VERIFICATION_CHECKLIST.md) (15 min)
+3. **Verify** [VERIFICATION_CHECKLIST.md](VERIFICATION_CHECKLIST.md) (15 min)
    - Check prerequisites
    - Verify installation
 
-3. **Follow** [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) (30 min)
+4. **Follow** [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) (30 min)
    - Complete setup with all details
    - Create all recommended assets
 
