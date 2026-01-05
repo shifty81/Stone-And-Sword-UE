@@ -4,8 +4,14 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 
 ## 🎯 Quick Navigation
 
+### I'm Wondering: "What's Left to Do?" ❓
+→ **[WHATS_LEFT.md](WHATS_LEFT.md)** - Answers "what's needed to edit in Unreal Engine?"
+
 ### I Want to Get Started RIGHT NOW! ⚡
 → **[QUICK_START.md](QUICK_START.md)** - 10-minute fast track to a playable scene
+
+### I Want Automated Setup 🤖
+→ **[Content/Python/README.md](Content/Python/README.md)** - Python script for automatic asset creation
 
 ### I Want Complete Instructions 📖
 → **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)** - Comprehensive step-by-step guide
@@ -31,6 +37,8 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 
 | Document | Purpose | Time | When to Use |
 |----------|---------|------|-------------|
+| [WHATS_LEFT.md](WHATS_LEFT.md) | What's needed for UE | 2 min | Answers: "Can I edit this project?" |
+| [Content/Python/README.md](Content/Python/README.md) | Automated asset creation | 5 min | When you want automatic setup |
 | [QUICK_START.md](QUICK_START.md) | Get playing fast | 10 min | When you want immediate results |
 | [TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md) | Fix build errors | 5-30 min | When compilation fails |
 | [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) | Complete setup guide | 30-60 min | When you want to understand everything |
