@@ -1,18 +1,31 @@
 # Stone and Sword - Game Engine Project
 
+> **❓ "Can I open this in Unreal Engine?"** YES! See **[WHATS_LEFT.md](WHATS_LEFT.md)** for exactly what you need to do (5-10 minutes of asset creation).
+
 > **📚 New to this project?** Check out **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** to find the right guide for you!
 
 > **🔧 Getting "StoneAndSword could not be compiled" error?** See **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** for solutions or use the automated build script: `.\BuildProject.ps1`
 
 ## 🚀 Quick Start (Get Playing in 10 Minutes!)
 
-**Want to get started right away?** See **[QUICK_START.md](QUICK_START.md)** for a fast-track guide to:
-- Open the project in Unreal Engine 5.6
-- Create a playable scene with terrain, character, and controls
-- Test your first procedurally generated world
+**The project opens in Unreal Engine 5.6 right now!** You just need to create 2 simple assets:
+
+### Option 1: Automated (5 minutes) ⚡
+1. Open the project in Unreal Engine 5.6
+2. Run: `py Content/Python/setup_project_assets.py`
+3. Restart editor and press Play!
+
+**See:** [Content/Python/README.md](Content/Python/README.md)
+
+### Option 2: Manual (10 minutes) 📝
+Follow **[QUICK_START.md](QUICK_START.md)** to manually:
+- Create a level with lighting and sky
+- Create a terrain material
+- Test your procedurally generated world
 
 **For comprehensive setup instructions**, see **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)**.  
-**To understand the full project**, see **[PROJECT_STATUS.md](PROJECT_STATUS.md)**.
+**To understand the full project**, see **[PROJECT_STATUS.md](PROJECT_STATUS.md)**.  
+**To see what's needed**, see **[WHATS_LEFT.md](WHATS_LEFT.md)**.
 
 ## 🎮 Project Overview
 
