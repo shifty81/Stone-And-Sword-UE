@@ -12,6 +12,13 @@ Usage:
 """
 
 import unreal
+import os
+import configparser
+
+# Constants
+DEFAULT_MAP_PATH = "/Game/Maps/DefaultEmpty"
+DEFAULT_MATERIAL_PATH = "/Game/Materials/M_Terrain"
+GRASS_TEXTURE_PATH = "/Game/Textures/T_Grass"
 
 def log(message):
     """Print to Unreal's output log"""
@@ -33,13 +40,12 @@ def create_default_map():
     editor_level_lib = unreal.EditorLevelLibrary()
     
     # Check if map already exists
-    map_path = "/Game/Maps/DefaultEmpty"
-    if unreal.EditorAssetLibrary.does_asset_exist(map_path):
-        log(f"Map already exists at {map_path}, skipping creation")
+    if unreal.EditorAssetLibrary.does_asset_exist(DEFAULT_MAP_PATH):
+        log(f"Map already exists at {DEFAULT_MAP_PATH}, skipping creation")
         return True
     
     # Create new empty level
-    new_world = editor_level_lib.new_level("/Game/Maps/DefaultEmpty")
+    new_world = editor_level_lib.new_level(DEFAULT_MAP_PATH)
     if not new_world:
         log_error("Failed to create new level")
         return False
@@ -110,7 +116,7 @@ def create_default_map():
     # Save the map
     success = unreal.EditorAssetLibrary.save_loaded_asset(world)
     if success:
-        log(f"Successfully created and saved map at {map_path}")
+        log(f"Successfully created and saved map at {DEFAULT_MAP_PATH}")
         return True
     else:
         log_error("Failed to save map")
@@ -120,11 +126,9 @@ def create_terrain_material():
     """Create the basic terrain material using the grass texture"""
     log("Creating terrain material...")
     
-    material_path = "/Game/Materials/M_Terrain"
-    
     # Check if material already exists
-    if unreal.EditorAssetLibrary.does_asset_exist(material_path):
-        log(f"Material already exists at {material_path}, skipping creation")
+    if unreal.EditorAssetLibrary.does_asset_exist(DEFAULT_MATERIAL_PATH):
+        log(f"Material already exists at {DEFAULT_MATERIAL_PATH}, skipping creation")
         return True
     
     # Create material asset
@@ -143,7 +147,7 @@ def create_terrain_material():
         return False
     
     # Load grass texture
-    grass_texture = unreal.load_asset("/Game/Textures/T_Grass")
+    grass_texture = unreal.load_asset(GRASS_TEXTURE_PATH)
     if not grass_texture:
         log_warning("Could not load grass texture, material will be created without texture")
     else:
@@ -164,7 +168,7 @@ def create_terrain_material():
     
     # Save material
     unreal.EditorAssetLibrary.save_loaded_asset(material)
-    log(f"Successfully created terrain material at {material_path}")
+    log(f"Successfully created terrain material at {DEFAULT_MATERIAL_PATH}")
     return True
 
 def configure_project_settings():
@@ -177,11 +181,10 @@ def configure_project_settings():
     # Note: Project settings for default maps are configured in DefaultEngine.ini
     # This Python script confirms they exist
     
-    map_path = "/Game/Maps/DefaultEmpty"
-    if unreal.EditorAssetLibrary.does_asset_exist(map_path):
+    if unreal.EditorAssetLibrary.does_asset_exist(DEFAULT_MAP_PATH):
         log("Default map is ready. Update DefaultEngine.ini to use it:")
-        log("  GameDefaultMap=/Game/Maps/DefaultEmpty")
-        log("  EditorStartupMap=/Game/Maps/DefaultEmpty")
+        log(f"  GameDefaultMap={DEFAULT_MAP_PATH}")
+        log(f"  EditorStartupMap={DEFAULT_MAP_PATH}")
     else:
         log_warning("Default map not found, please run create_default_map() first")
     
@@ -190,9 +193,6 @@ def configure_project_settings():
 def update_engine_config():
     """Update DefaultEngine.ini to use the created map"""
     log("Updating engine configuration...")
-    
-    import configparser
-    import os
     
     # Get project directory
     project_dir = unreal.Paths.project_dir()
@@ -222,10 +222,10 @@ def update_engine_config():
                 new_lines.append(line)
             elif in_maps_section:
                 if line.strip().startswith('GameDefaultMap='):
-                    new_lines.append('GameDefaultMap=/Game/Maps/DefaultEmpty\n')
+                    new_lines.append(f'GameDefaultMap={DEFAULT_MAP_PATH}\n')
                     updated_game_map = True
                 elif line.strip().startswith('EditorStartupMap='):
-                    new_lines.append('EditorStartupMap=/Game/Maps/DefaultEmpty\n')
+                    new_lines.append(f'EditorStartupMap={DEFAULT_MAP_PATH}\n')
                     updated_editor_map = True
                 else:
                     new_lines.append(line)
@@ -264,14 +264,18 @@ def setup_project():
     if not create_terrain_material():
         success = False
     
-    # Step 3: Update config
-    if not update_engine_config():
+    # Step 3: Update config (optional - user can do manually)
+    config_updated = update_engine_config()
+    if not config_updated:
         log_warning("Config update failed, you may need to manually update DefaultEngine.ini")
+        log_warning("Set GameDefaultMap and EditorStartupMap to /Game/Maps/DefaultEmpty")
     
     # Summary
     log("=" * 60)
     if success:
         log("✓ Project setup completed successfully!")
+        if not config_updated:
+            log("⚠ Note: Config file update failed - please update DefaultEngine.ini manually")
         log("")
         log("Next steps:")
         log("1. Restart Unreal Editor for config changes to take effect")
