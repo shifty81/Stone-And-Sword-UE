@@ -40,12 +40,15 @@ StoneAndSword/
 
 ### World Generation System
 The `AWorldGenerator` class provides procedural terrain generation:
-- **Flat terrain with height variation**: Creates a walkable surface with subtle undulation
+- **Realistic terrain with Perlin noise**: Uses industry-standard Perlin noise (Fractional Brownian Motion) for natural-looking landscapes
 - **Configurable parameters**:
   - World size (X and Y dimensions)
   - Grid resolution (vertex spacing)
   - Height variation (terrain undulation)
-  - Noise scale (terrain detail)
+  - Noise scale (terrain frequency/detail)
+  - Noise octaves (1-8, controls level of detail)
+  - Noise persistence (0.1-1.0, controls octave contribution)
+  - Noise lacunarity (1.0-4.0, controls frequency multiplier)
   - Random seed (for reproducible worlds)
 - **Auto-generation**: Can automatically generate terrain on level start
 - **Material support**: Apply custom materials to the terrain

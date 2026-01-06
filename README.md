@@ -190,7 +190,8 @@ This repository also contains **comprehensive documentation** for transitioning 
 - 🌍 **Procedural World Generation**
   - Port of existing UE system
   - Configurable terrain
-  - Noise-based height maps
+  - Perlin noise-based height maps (Fractional Brownian Motion)
+  - Multi-octave detail control
   - Material splatting
 
 - 🎮 **Character Controller**

@@ -157,7 +157,9 @@ UObject (Unreal Engine Base)
 
 ### 🌍 World Generation System
 - **Procedural Mesh Generation**: Uses UProceduralMeshComponent for runtime terrain
-- **Configurable Parameters**: Size, resolution, height, noise scale, random seed
+- **Perlin Noise Algorithm**: Industry-standard Perlin noise with Fractional Brownian Motion (fBM)
+- **Configurable Parameters**: Size, resolution, height, noise scale, octaves, persistence, lacunarity, random seed
+- **Multi-Octave Detail**: Adjustable detail levels (1-8 octaves) for realistic terrain
 - **Performance**: Grid-based generation with customizable detail levels
 - **Extensible**: Easy to add biomes, vegetation, and advanced features
 
@@ -199,7 +201,8 @@ UObject (Unreal Engine Base)
 ## Extension Points
 
 ### Easy to Add
-- ✅ More complex terrain algorithms (Perlin noise, Diamond-Square)
+- ✅ **Already Implemented**: Perlin noise terrain generation with Fractional Brownian Motion
+- ✅ More complex terrain algorithms (Diamond-Square, Ridged noise, etc.)
 - ✅ Multiple biomes with smooth transitions
 - ✅ Water bodies and rivers
 - ✅ Vegetation spawning system
