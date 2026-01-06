@@ -1,38 +1,42 @@
-# Problem Statement: Player Character Visibility and C++ Gameplay Implementation
+# Problem Statement: First-Person Player Character and C++ Gameplay Implementation
 
 ## Questions from Problem Statement
 
 ### Question 1: "In the world I would like a player character that is visible with animations. Can this be achieved with store assets easily?"
 
-**Answer: ✅ YES! Very easily!**
+**Answer: ✅ YES! This is a FIRST-PERSON game!**
 
-The WorldPlayerCharacter C++ class now supports visible character meshes with animations, and you can use free store assets from:
+The WorldPlayerCharacter C++ class is implemented as a **first-person character**:
+- ✅ First-person camera at eye level
+- ✅ Mouse look controls
+- ✅ FPS-style movement
+- ✅ Works immediately (pure first-person mode by default)
 
-1. **Unreal Engine Third Person Template** (Built-in, 5 minutes)
-   - Free mannequin characters (Manny/Quinn)
-   - Complete animation sets (idle, walk, run, jump)
-   - Already compatible with the project
+**Do you need visible arms/hands?**
 
-2. **Mixamo** (Free, 15 minutes)
-   - Hundreds of free character models
-   - Thousands of free animations
-   - Requires free Adobe account
-   - Website: https://www.mixamo.com
+This is **optional** for first-person games. You can:
 
-3. **Unreal Engine Marketplace** (Free options available)
-   - Paragon characters (free)
-   - Stylized character packs (free)
-   - Animation starter packs (free)
+1. **Pure First-Person** (Default, 0 minutes)
+   - No visible body (like classic FPS: Doom, Quake)
+   - Already works, press Play!
 
-**How to Set Up:**
+2. **First-Person with Arms** (Optional, 5-20 minutes)
+   - Add visible hands/arms (for holding weapons, tools)
+   - Use free store assets:
+     - **UE First Person Template** (5 min, built-in)
+     - **Mixamo** (20 min, free)
+     - **UE Marketplace** (varies, free options)
 
-The C++ code is ready to accept store assets. You just need to:
+3. **First-Person with Full Body** (Optional)
+   - See your own legs and body
+   - Set `bShowBodyInFirstPerson = true`
 
-1. Create a Blueprint of WorldPlayerCharacter (called `BP_PlayerCharacter`)
-2. Set two properties:
-   - **Character Mesh Asset** → Your downloaded skeletal mesh
-   - **Animation Blueprint Class** → Your animation blueprint
-3. Set BP_PlayerCharacter as the default pawn in Project Settings
+**How to Set Up (if you want visible arms):**
+
+1. Create a Blueprint of WorldPlayerCharacter
+2. Set **First Person Arms Mesh** property
+3. Set **First Person Arms Animation Class** property
+4. Done!
 
 **Step-by-step instructions:** See `CHARACTER_SETUP_GUIDE.md`
 
@@ -42,9 +46,9 @@ The C++ code is ready to accept store assets. You just need to:
 
 **Answer: ✅ YES! Already 100% implemented in C++!**
 
-The entire gameplay loop is **already fully implemented** in C++ in the `WorldPlayerCharacter` class:
+The entire first-person gameplay loop is **fully implemented** in C++ in the `WorldPlayerCharacter` class:
 
-#### ✅ Input Handling (C++)
+#### ✅ FPS Input Handling (C++)
 ```cpp
 // WorldPlayerCharacter.cpp - SetupPlayerInputComponent()
 PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
@@ -54,13 +58,14 @@ PlayerInputComponent->BindAxis("Turn", this, &AWorldPlayerCharacter::Turn);
 PlayerInputComponent->BindAxis("LookUp", this, &AWorldPlayerCharacter::LookUp);
 ```
 
-#### ✅ Movement Logic (C++)
+#### ✅ FPS Movement Logic (C++)
 ```cpp
 // WorldPlayerCharacter.cpp - MoveForward()
 void AWorldPlayerCharacter::MoveForward(float Value)
 {
     if ((Controller != nullptr) && (Value != 0.0f))
     {
+        // Move in direction camera is facing (FPS-style)
         const FRotator Rotation = Controller->GetControlRotation();
         const FRotator YawRotation(0, Rotation.Yaw, 0);
         const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
@@ -69,43 +74,43 @@ void AWorldPlayerCharacter::MoveForward(float Value)
 }
 ```
 
-#### ✅ Camera System (C++)
+#### ✅ First-Person Camera System (C++)
 ```cpp
 // WorldPlayerCharacter.cpp - Constructor
-CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-CameraBoom->TargetArmLength = 400.0f;
-CameraBoom->bUsePawnControlRotation = true;
-
-CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-CameraComponent->SetupAttachment(CameraBoom);
+FirstPersonCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+FirstPersonCamera->SetupAttachment(GetCapsuleComponent());
+FirstPersonCamera->SetRelativeLocation(FVector(0.0f, 0.0f, 64.0f)); // Eye height
+FirstPersonCamera->bUsePawnControlRotation = true; // Camera follows mouse
 ```
 
-#### ✅ Character Movement (C++)
+#### ✅ FPS Controller Setup (C++)
 ```cpp
 // WorldPlayerCharacter.cpp - Constructor
-GetCharacterMovement()->bOrientRotationToMovement = true;
-GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
-GetCharacterMovement()->MaxWalkSpeed = 600.0f;
-GetCharacterMovement()->BrakingDecelerationWalking = 2000.0f;
+bUseControllerRotationYaw = true;    // Character rotates with camera (FPS mode)
+bUseControllerRotationPitch = false; // Don't tilt character up/down
+GetCharacterMovement()->bOrientRotationToMovement = false; // FPS, not third-person
+GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f); // Fast FPS rotation
 ```
 
-#### ✅ Character Mesh & Animation Support (C++)
+#### ✅ Optional Arms/Body System (C++)
 ```cpp
 // WorldPlayerCharacter.cpp - BeginPlay()
 void AWorldPlayerCharacter::BeginPlay()
 {
     Super::BeginPlay();
     
-    // Apply character mesh if set
-    if (CharacterMeshAsset && GetMesh())
+    // Configure body visibility for first-person
+    if (GetMesh())
     {
-        GetMesh()->SetSkeletalMesh(CharacterMeshAsset);
+        GetMesh()->SetOwnerNoSee(!bShowBodyInFirstPerson);
     }
     
-    // Apply animation blueprint if set
-    if (AnimationBlueprintClass && GetMesh())
+    // Apply first-person arms mesh if set (optional)
+    if (FirstPersonArmsMesh && GetMesh())
     {
-        GetMesh()->SetAnimInstanceClass(AnimationBlueprintClass);
+        GetMesh()->SetSkeletalMesh(FirstPersonArmsMesh);
+        GetMesh()->SetOwnerNoSee(false);
+        GetMesh()->SetOnlyOwnerSee(true);
     }
 }
 ```
@@ -118,102 +123,170 @@ void AWorldPlayerCharacter::BeginPlay()
 
 | Feature | Implementation | File |
 |---------|----------------|------|
-| Input Handling | C++ | WorldPlayerCharacter.cpp |
-| Movement Logic | C++ | WorldPlayerCharacter.cpp |
-| Camera System | C++ | WorldPlayerCharacter.cpp |
+| FPS Input Handling | C++ | WorldPlayerCharacter.cpp |
+| FPS Movement Logic | C++ | WorldPlayerCharacter.cpp |
+| First-Person Camera | C++ | WorldPlayerCharacter.cpp |
+| Mouse Look | C++ | WorldPlayerCharacter.cpp |
 | Jump Mechanics | C++ | WorldPlayerCharacter.cpp (inherited) |
-| Character Controller | C++ | WorldPlayerCharacter.cpp |
-| Mesh Configuration | C++ | WorldPlayerCharacter.cpp |
-| Animation Setup | C++ | WorldPlayerCharacter.cpp |
+| Controller Rotation | C++ | WorldPlayerCharacter.cpp |
+| Mesh Visibility | C++ | WorldPlayerCharacter.cpp |
 | Game Mode | C++ | StoneAndSwordGameModeBase.cpp |
 | World Generation | C++ | WorldGenerator.cpp |
 
 ### Optional Blueprint Usage (Visual Assets Only) 🎨
 
-Blueprints are **NOT required** for gameplay logic. They are only used to:
+Blueprints are **NOT required** for FPS gameplay. They are only used to:
 
-1. **Assign visual assets** (mesh and animations)
-   - Create `BP_PlayerCharacter` as a child of `WorldPlayerCharacter`
-   - Set `CharacterMeshAsset` property to your mesh
-   - Set `AnimationBlueprintClass` property to your animation blueprint
+1. **Assign optional visual assets** (arms/hands mesh)
+   - Create `BP_FPSCharacter` as child of `WorldPlayerCharacter`
+   - Set `FirstPersonArmsMesh` property (optional)
+   - Set `FirstPersonArmsAnimationClass` property (optional)
 
 2. **Override default values** (optional)
    - Change movement speed
-   - Adjust camera distance
-   - Modify other exposed properties
+   - Adjust camera height
+   - Enable/disable body visibility
 
-**All gameplay code runs in C++!** Blueprints just hold data (asset references and property overrides).
+**All FPS gameplay code runs in C++!** Blueprints just hold data (optional asset references).
+
+---
+
+## First-Person vs Third-Person
+
+### This Project: FIRST-PERSON ✅
+
+```
+Current Implementation:
+├── Camera: At eye level (first-person)
+├── View: Looking through character's eyes
+├── Rotation: Character rotates with camera
+├── Body: Hidden by default (pure FPS)
+└── Optional: Can add visible arms/hands
+```
+
+### Key Differences:
+
+| Feature | First-Person (This Project) | Third-Person |
+|---------|---------------------------|--------------|
+| Camera Position | At eye level | Behind character |
+| View | Through character's eyes | Looking at character |
+| Character Rotation | With camera yaw | To movement direction |
+| Body Visible | No (unless enabled) | Yes, always |
+| Camera Component | SpringArm? No | SpringArm? Yes |
+| Typical Games | Doom, Quake, Half-Life | Tomb Raider, Uncharted |
 
 ---
 
 ## Summary
 
-### Can you have a visible player character with animations using store assets?
-✅ **YES!** 
-- Multiple free sources (UE Template, Mixamo, Marketplace)
-- Easy to set up (5-15 minutes)
-- C++ code supports all store assets
-- See `CHARACTER_SETUP_GUIDE.md` for step-by-step instructions
+### Is this a first-person game?
+✅ **YES! Fully first-person FPS in C++**
+- Camera at eye level
+- FPS-style movement and rotation
+- Mouse look controls
+- Pure first-person by default
+
+### Can I have visible arms/hands with animations from store assets?
+✅ **YES! Optional:**
+- UE First Person Template (5 min, easiest)
+- Mixamo (20 min, free)
+- UE Marketplace (varies, free options)
+- Default: Pure FPS (no visible body)
 
 ### Is the gameplay loop implemented in C++?
-✅ **YES! 100% implemented!**
-- All input handling in C++
-- All movement logic in C++
-- All camera system in C++
-- All character controller in C++
-- Blueprints only used for visual asset assignment (optional)
+✅ **YES! 100% implemented:**
+- All FPS input handling
+- All FPS movement logic
+- All camera system
+- All controller rotation
+- All mesh visibility
 
 ### What You Need to Do
 
 1. **Follow `QUICK_START.md`** to set up the basic project (10 min)
-2. **Follow `CHARACTER_SETUP_GUIDE.md`** to add a visible character (5-15 min)
-3. **Press Play!** Everything else is already implemented in C++
+2. **Press Play!** First-person gameplay already works
+3. **Optional**: Follow `CHARACTER_SETUP_GUIDE.md` to add visible arms (5-20 min)
 
-**Total time to get a fully functional game with visible animated character: 15-25 minutes**
+**Total time to get a fully functional FPS game: 10 minutes**
+**(or 15-30 minutes if you want visible arms)**
 
 ---
 
 ## Code Architecture
 
 ```
-WorldPlayerCharacter (C++)
+WorldPlayerCharacter (C++ - First-Person)
 ├── Input Handling (C++)
-│   ├── MoveForward()
-│   ├── MoveRight()
-│   ├── Turn()
-│   ├── LookUp()
-│   └── Jump (inherited from ACharacter)
+│   ├── MoveForward() - FPS forward/back
+│   ├── MoveRight() - FPS strafe
+│   ├── Turn() - Mouse X (yaw)
+│   ├── LookUp() - Mouse Y (pitch)
+│   └── Jump() - Inherited
 │
-├── Camera System (C++)
-│   ├── CameraBoom (USpringArmComponent)
-│   └── CameraComponent (UCameraComponent)
+├── First-Person Camera System (C++)
+│   └── FirstPersonCamera (UCameraComponent)
+│       ├── At eye level (Z=64)
+│       ├── Attached to capsule
+│       └── Uses pawn control rotation
 │
-├── Movement System (C++)
-│   └── CharacterMovementComponent (configured)
+├── FPS Controller (C++)
+│   ├── bUseControllerRotationYaw = true (FPS mode)
+│   ├── Character rotates with camera
+│   └── Fast rotation rate (720°/s)
 │
-└── Visual System (C++)
-    ├── GetMesh() (inherited SkeletalMeshComponent)
-    ├── CharacterMeshAsset (property - set from Blueprint or defaults)
-    └── AnimationBlueprintClass (property - set from Blueprint or defaults)
+├── FPS Movement (C++)
+│   ├── Movement based on camera direction
+│   ├── bOrientRotationToMovement = false
+│   └── CharacterMovementComponent
+│
+└── Visual System (C++ - Optional)
+    ├── GetMesh() - Body (hidden by default)
+    ├── FirstPersonArmsMesh (property - optional)
+    └── FirstPersonArmsAnimationClass (property - optional)
 
-BP_PlayerCharacter (Blueprint - Optional)
-└── Asset References Only
-    ├── CharacterMeshAsset = SK_Manny (or Mixamo mesh)
-    └── AnimationBlueprintClass = ABP_Manny (or custom ABP)
+BP_FPSCharacter (Blueprint - Optional)
+└── Optional Asset References
+    ├── FirstPersonArmsMesh = SK_FPArms (optional)
+    └── FirstPersonArmsAnimationClass = ABP_FPArms (optional)
 ```
 
 **Legend:**
 - **(C++)** = Gameplay logic implemented in C++
-- **(property)** = Data property that can be set in Blueprint
+- **(Optional)** = Not required for basic FPS gameplay
 - **(Blueprint - Optional)** = Only holds asset references, no logic
+
+---
+
+## Comparison: Pure FPS vs FPS with Arms
+
+### Pure FPS (Default - 0 min setup)
+```
+✅ First-person camera
+✅ FPS movement
+✅ Mouse look
+✅ Jump
+❌ No visible body/arms
+Result: Works like classic Doom, Quake
+```
+
+### FPS with Arms (Optional - 5-20 min setup)
+```
+✅ First-person camera
+✅ FPS movement
+✅ Mouse look
+✅ Jump
+✅ Visible arms/hands
+✅ Arm animations
+Result: Works like modern FPS (Call of Duty, etc.)
+```
 
 ---
 
 ## Files to Reference
 
-- **CHARACTER_SETUP_GUIDE.md** - Complete guide for adding visible character
-- **WorldPlayerCharacter.h** - Header file with all properties
-- **WorldPlayerCharacter.cpp** - Implementation with all gameplay logic
+- **CHARACTER_SETUP_GUIDE.md** - Guide for adding optional FPS arms
+- **WorldPlayerCharacter.h** - Header file with FPS properties
+- **WorldPlayerCharacter.cpp** - Implementation with all FPS logic
 - **QUICK_START.md** - Basic project setup
 - **PROJECT_OVERVIEW.md** - Full project architecture
 
@@ -221,14 +294,29 @@ BP_PlayerCharacter (Blueprint - Optional)
 
 ## Conclusion
 
-**Both questions are answered with a resounding YES!**
+**Both questions answered with a resounding YES!**
 
-1. ✅ You can easily add a visible player character with animations using free store assets
-2. ✅ The gameplay loop is 100% implemented in C++ (already done!)
+1. ✅ This is a **first-person game** (FPS)
+2. ✅ You can optionally add visible arms/hands using free store assets
+3. ✅ The gameplay loop is 100% implemented in C++ (already done!)
 
 You just need to:
 1. Set up the project (10 min)
-2. Add visual assets (5-15 min)
-3. Play!
+2. Press Play! (FPS already works)
+3. Optional: Add visible arms (5-20 min)
 
-**No additional C++ coding required** - it's all already implemented and ready to use!
+**No additional C++ coding required** - first-person gameplay is fully implemented!
+
+---
+
+## Why First-Person?
+
+First-person is perfect for:
+- ✅ Open world exploration
+- ✅ Sword combat (Stone and Sword theme!)
+- ✅ Immersive gameplay
+- ✅ Simpler animation requirements
+- ✅ Better performance (less to render)
+- ✅ Classic game feel (Skyrim, Minecraft)
+
+The project name "Stone and Sword" suggests medieval combat - perfect for first-person!

@@ -8,14 +8,11 @@
 
 // Forward declarations
 class UCameraComponent;
-class USpringArmComponent;
-class USkeletalMeshComponent;
-class UAnimInstance;
 
 /**
- * Player character for exploring the open world.
- * Provides third-person camera controls, WASD movement, and jump capability.
- * Supports skeletal mesh and animations that can be easily set from store assets.
+ * Player character for exploring the open world in first-person view.
+ * Provides first-person camera controls, WASD movement, and jump capability.
+ * Supports optional visible arms/hands mesh with animations from store assets.
  * Optimized for performance with tick disabled.
  */
 UCLASS()
@@ -32,42 +29,43 @@ protected:
 public:	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	/** Get the camera component */
+	/** Get the first-person camera component */
 	UFUNCTION(BlueprintPure, Category = "Camera")
-	UCameraComponent* GetCameraComponent() const { return CameraComponent; }
+	UCameraComponent* GetFirstPersonCamera() const { return FirstPersonCamera; }
 
-	/** Get the camera boom component */
-	UFUNCTION(BlueprintPure, Category = "Camera")
-	USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-
-	/** Get the character mesh component */
+	/** Get the character mesh component (body - hidden in first person) */
 	UFUNCTION(BlueprintPure, Category = "Mesh")
 	USkeletalMeshComponent* GetCharacterMesh() const { return GetMesh(); }
 
 protected:
-	/** Camera component */
+	/** First-person camera component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UCameraComponent> CameraComponent;
-
-	/** Camera boom positioning the camera behind the character */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<USpringArmComponent> CameraBoom;
+	TObjectPtr<UCameraComponent> FirstPersonCamera;
 
 	/** 
-	 * Skeletal mesh to use for the character.
+	 * Optional first-person arms/hands mesh.
 	 * Can be set to any mesh from UE Marketplace, Mixamo, or custom assets.
-	 * If not set, character will be invisible but still functional.
+	 * Shows in first-person view (hands/arms holding weapons, etc.)
+	 * If not set, pure first-person view without visible body parts.
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
-	TObjectPtr<USkeletalMesh> CharacterMeshAsset;
+	TObjectPtr<USkeletalMesh> FirstPersonArmsMesh;
 
 	/** 
-	 * Animation Blueprint class to use for character animations.
+	 * Animation Blueprint class for first-person arms animations.
 	 * Can be set to animation blueprints from store assets or custom animations.
-	 * Supports idle, walk, run, jump animations.
+	 * Supports idle, walk, run, jump animations for arms/hands.
 	 */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Animation")
-	TSubclassOf<UAnimInstance> AnimationBlueprintClass;
+	TSubclassOf<UAnimInstance> FirstPersonArmsAnimationClass;
+
+	/** 
+	 * Whether to show the full body mesh in first person.
+	 * If false, body is hidden and only FirstPersonArmsMesh is visible.
+	 * If true, full body is visible (can see own legs, etc.)
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Mesh")
+	bool bShowBodyInFirstPerson;
 
 	/** Movement speed multiplier */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")

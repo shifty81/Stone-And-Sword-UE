@@ -1,212 +1,216 @@
-# Character Setup Guide - Adding Visible Character with Animations
+# Character Setup Guide - First-Person Game
 
 ## Overview
 
-The **WorldPlayerCharacter** is fully implemented in C++ with complete gameplay functionality:
-- ✅ Third-person camera system
+The **WorldPlayerCharacter** is fully implemented in C++ as a **first-person character** with complete gameplay functionality:
+- ✅ First-person camera system
 - ✅ WASD movement controls
 - ✅ Mouse look/camera rotation
 - ✅ Jump mechanics
 - ✅ All gameplay logic in C++
 
-This guide shows you how to add a **visible character mesh with animations** using free store assets.
+This guide shows you how to optionally add **visible first-person arms/hands with animations** using free store assets.
 
 ## Quick Answer
 
-**YES!** You can easily add a visible character with animations using:
-1. **Unreal Engine Marketplace** - Free character packs
-2. **Mixamo** - Free characters and animations (Adobe account)
-3. **Third Person Template** - Built into Unreal Engine
+**YES!** This is a **first-person game**. The character is already functional as pure first-person (no visible body).
 
-**The entire gameplay loop is already implemented in C++** - you just need to assign visual assets!
+You can optionally add:
+1. **First-person arms/hands** - For holding weapons, tools, etc.
+2. **Full body visibility** - To see your own legs and body in first-person
+
+**The entire gameplay loop is already implemented in C++** - you just need to assign visual assets if you want them!
 
 ---
 
-## Method 1: Using Unreal Engine Third Person Template (Easiest - 5 minutes)
+## Default Configuration (Pure First-Person)
 
-The fastest way is to use the mannequin from UE's Third Person Template:
+By default, the character works in **pure first-person mode**:
+- ✅ Camera at eye level
+- ✅ No visible body (like classic FPS games)
+- ✅ WASD movement
+- ✅ Mouse look
+- ✅ Jump
 
-### Steps:
+**Press Play and it works immediately!** No additional setup required for basic FPS gameplay.
 
-1. **Open your project** in Unreal Engine 5.6
+---
 
-2. **Add Third Person Content** (if not already added):
-   - Go to **Edit > Plugins**
-   - Search for "Third Person"
-   - Enable "Third Person Template" if available
-   - OR: Create a new Third Person project temporarily, then migrate assets
+## Optional: Adding First-Person Arms/Hands
 
-3. **Create a Blueprint of WorldPlayerCharacter**:
-   - In Content Browser, right-click in a folder (e.g., `Content/Blueprints/`)
+If you want to see hands/arms (for holding weapons, tools, etc.), follow these methods:
+
+### Method 1: Using Unreal Engine First Person Template (Easiest - 5 minutes)
+
+1. **Add First Person Content** (if not already added):
+   - Create a temporary First Person project, or
+   - Use Content Browser > Add > Add Feature or Content Pack > First Person
+
+2. **Create a Blueprint of WorldPlayerCharacter**:
+   - In Content Browser, right-click in `Content/Blueprints/`
    - Select **Blueprint Class**
-   - Search for `WorldPlayerCharacter` in the parent class picker
-   - Name it `BP_PlayerCharacter`
+   - Search for `WorldPlayerCharacter`
+   - Name it `BP_FPSCharacter`
 
-4. **Open BP_PlayerCharacter** and configure:
-   - In the **Details** panel, find the **Mesh** section
-   - Set **Character Mesh Asset** to `SKM_Manny` (or `SKM_Quinn` for female)
-   - Set **Animation Blueprint Class** to `ABP_Manny` (or `ABP_Quinn`)
+3. **Open BP_FPSCharacter** and configure:
+   - In **Details** panel, find **Mesh** section
+   - Set **First Person Arms Mesh** to `SKM_FPArms` (or similar from First Person template)
+   - Set **First Person Arms Animation Class** to the FP arms animation blueprint
    - **Compile** and **Save**
 
-5. **Set as Default Pawn**:
+4. **Set as Default Pawn**:
    - Open **Edit > Project Settings**
    - Go to **Maps & Modes** > **Default Modes**
    - Under **Selected GameMode** (StoneAndSwordGameModeBase)
-   - Set **Default Pawn Class** to `BP_PlayerCharacter`
+   - Set **Default Pawn Class** to `BP_FPSCharacter`
 
-6. **Test**:
+5. **Test**:
    - Press **Play** (Alt+P)
-   - You should see a visible character with running/jumping animations!
+   - You should see first-person arms with animations!
 
 ---
 
-## Method 2: Using Mixamo (Free Characters - 15 minutes)
+### Method 2: Using Mixamo Arms/Hands (Free - 20 minutes)
 
-Mixamo provides free high-quality characters and animations:
+Mixamo provides free character models. You can use just the arms portion:
 
-### Step 1: Download Character from Mixamo
+#### Step 1: Download Character from Mixamo
 
 1. Go to **[mixamo.com](https://www.mixamo.com)**
 2. Sign in with Adobe account (free)
-3. Browse **Characters** and select one you like
-4. Click **Download**:
+3. Browse **Characters** and select one
+4. Download:
    - Format: **FBX for Unreal (.fbx)**
    - Pose: **T-Pose**
-   - Download
 
-### Step 2: Download Animations from Mixamo
+#### Step 2: Download Animations
 
-Download these essential animations:
-1. **Idle**
-   - Search "Idle" → Select "Idle"
-   - Download: FBX for Unreal, **Without Skin**, 30 FPS
+Download first-person appropriate animations:
+1. **Idle** (arms idle)
+2. **Walk** (arms swaying)
+3. **Run** (arms pumping)
+4. **Rifle Idle** (if you want weapon holding poses)
 
-2. **Walk**
-   - Search "Walking" → Select "Walking"
-   - Download: FBX for Unreal, **Without Skin**, 30 FPS
+For each: FBX for Unreal, **Without Skin**, 30 FPS
 
-3. **Run**
-   - Search "Running" → Select "Running"
-   - Download: FBX for Unreal, **Without Skin**, 30 FPS
+#### Step 3: Import into Unreal
 
-4. **Jump**
-   - Search "Jump" → Select "Jumping"
-   - Download: FBX for Unreal, **Without Skin**, 30 FPS
+1. **Create folders**:
+   - `Content/Characters/FirstPerson/`
+   - `Content/Characters/FirstPerson/Animations/`
 
-### Step 3: Import into Unreal Engine
-
-1. **Create folders** in Content Browser:
-   - `Content/Characters/Mixamo/`
-   - `Content/Characters/Mixamo/Animations/`
-
-2. **Import the Character**:
-   - Drag character FBX into `Content/Characters/Mixamo/`
-   - Import settings:
-     - ✅ Import Mesh
-     - ✅ Import Skeleton
-     - ✅ Import Materials
-     - ✅ Import Textures
-     - Skeletal Mesh: Create new
-   - Click **Import All**
+2. **Import Character**:
+   - Import FBX to `Content/Characters/FirstPerson/`
+   - Create skeleton and skeletal mesh
 
 3. **Import Animations**:
-   - Drag animation FBXs into `Content/Characters/Mixamo/Animations/`
-   - For each animation:
-     - Select the **Skeleton** you just imported
-     - Click **Import All**
+   - Import to `Content/Characters/FirstPerson/Animations/`
+   - Use the skeleton you created
 
-### Step 4: Create Animation Blueprint
+#### Step 4: Extract Arms from Full Body (Optional)
 
-1. **Create Animation Blueprint**:
-   - Right-click in `Content/Characters/Mixamo/`
-   - Select **Animation > Animation Blueprint**
-   - Choose your imported **Skeleton**
-   - Name it `ABP_MixamoCharacter`
+If you want only arms visible:
+1. Open the skeletal mesh
+2. Delete unnecessary bones/meshes (legs, torso)
+3. Keep only arms, hands, and shoulders
+4. Save as `SK_FirstPersonArms`
 
-2. **Open ABP_MixamoCharacter**:
+#### Step 5: Create Animation Blueprint
 
-3. **In AnimGraph**:
-   - Create a **State Machine**:
-     - Right-click → Add **New State Machine**
-     - Name it "Locomotion"
-     - Connect output to **Final Animation Pose**
+1. Right-click in `Content/Characters/FirstPerson/`
+2. **Animation > Animation Blueprint**
+3. Choose your skeleton
+4. Name it `ABP_FirstPersonArms`
 
-4. **Open State Machine**:
-   - Create 3 states: **Idle**, **Walk**, **Jump**
-   - Connect Entry → Idle
-   - Add transitions between states
+5. **Configure AnimGraph**:
+   - Create simple state machine or blend space
+   - Idle when not moving
+   - Walk/Run based on velocity
 
-5. **Configure Each State**:
-   - **Idle State**: Add your Mixamo Idle animation
-   - **Walk State**: Add your Mixamo Walk/Run animation
-   - **Jump State**: Add your Mixamo Jump animation
+6. **Compile** and **Save**
 
-6. **In EventGraph** (Optional):
-   - Get character velocity and speed for blend spaces
-   - Set variables for state machine transitions
+#### Step 6: Apply to WorldPlayerCharacter
 
-7. **Compile** and **Save**
-
-### Step 5: Apply to WorldPlayerCharacter
-
-Same as Method 1, Step 3-5:
-- Create `BP_PlayerCharacter` blueprint
-- Set **Character Mesh Asset** to your Mixamo mesh
-- Set **Animation Blueprint Class** to `ABP_MixamoCharacter`
-- Set as default pawn in Project Settings
+Same as Method 1, steps 2-5
 
 ---
 
-## Method 3: Using UE Marketplace Assets (Free Options)
+### Method 3: Full Body in First-Person (See Your Legs)
 
-### Free Character Packs on UE Marketplace:
+If you want to see your own body (legs, torso) in first-person:
 
-1. **Stylized Character Kit**
-2. **Paragon Characters** (Epic's free characters)
-3. **Animation Starter Pack** (includes mannequin + animations)
+1. **Create BP_FPSCharacter** (as in Method 1)
 
-### Steps:
+2. **Configure**:
+   - Set **Show Body In First Person** to ✅ **True**
+   - This makes the full body mesh visible to you
+   - Use a full character mesh (not just arms)
 
-1. Open **Epic Games Launcher**
-2. Go to **Unreal Engine > Marketplace**
-3. Filter by **Free** assets
-4. Search for character packs
-5. Add to project
-6. Follow same setup as Method 1 or 2
-
----
-
-## Verification Checklist
-
-After setup, verify everything works:
-
-- [ ] Character mesh is visible in the world
-- [ ] Camera follows character correctly
-- [ ] WASD movement works
-- [ ] Mouse look works
-- [ ] Character animates when moving
-- [ ] Jump animation plays when jumping
-- [ ] Character rotates toward movement direction
+3. **Adjust Camera**:
+   - Camera height may need adjustment
+   - In C++, camera is at 64 units above capsule base
+   - Adjust `FirstPersonCamera->SetRelativeLocation()` if needed
 
 ---
 
-## C++ Gameplay Loop Confirmation
+## Configuration Options
 
-**The entire gameplay loop is implemented in C++:**
-
-✅ **Input Handling** (C++):
-```cpp
-// WorldPlayerCharacter.cpp - SetupPlayerInputComponent
-PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-PlayerInputComponent->BindAxis("MoveForward", this, &AWorldPlayerCharacter::MoveForward);
-PlayerInputComponent->BindAxis("MoveRight", this, &AWorldPlayerCharacter::MoveRight);
-PlayerInputComponent->BindAxis("Turn", this, &AWorldPlayerCharacter::Turn);
-PlayerInputComponent->BindAxis("LookUp", this, &AWorldPlayerCharacter::LookUp);
+### Pure First-Person (Default)
+```
+Show Body In First Person: ❌ False
+First Person Arms Mesh: (none)
+Result: No visible body, classic FPS style
 ```
 
-✅ **Movement Logic** (C++):
+### First-Person with Arms
+```
+Show Body In First Person: ❌ False  
+First Person Arms Mesh: SK_FirstPersonArms
+First Person Arms Animation Class: ABP_FirstPersonArms
+Result: Visible hands/arms, no body
+```
+
+### First-Person with Full Body
+```
+Show Body In First Person: ✅ True
+First Person Arms Mesh: SK_FullCharacter
+First Person Arms Animation Class: ABP_Character
+Result: Can see your own legs and body
+```
+
+---
+
+## C++ Implementation Details
+
+The first-person system is fully implemented in C++:
+
+### Camera Setup (C++)
 ```cpp
-// WorldPlayerCharacter.cpp - MoveForward/MoveRight
+// WorldPlayerCharacter.cpp - Constructor
+FirstPersonCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+FirstPersonCamera->SetupAttachment(GetCapsuleComponent());
+FirstPersonCamera->SetRelativeLocation(FVector(0.0f, 0.0f, 64.0f)); // Eye height
+FirstPersonCamera->bUsePawnControlRotation = true; // FPS camera control
+```
+
+### Controller Rotation (C++)
+```cpp
+// WorldPlayerCharacter.cpp - Constructor  
+bUseControllerRotationYaw = true;    // Character rotates with camera
+bUseControllerRotationPitch = false; // Don't tilt character up/down
+GetCharacterMovement()->bOrientRotationToMovement = false; // FPS mode
+```
+
+### Mesh Visibility (C++)
+```cpp
+// WorldPlayerCharacter.cpp - BeginPlay
+GetMesh()->SetOwnerNoSee(!bShowBodyInFirstPerson); // Hide from self if disabled
+GetMesh()->SetOnlyOwnerSee(true); // Arms only visible to owner
+```
+
+### Movement (C++)
+```cpp
+// WorldPlayerCharacter.cpp - MoveForward
 void AWorldPlayerCharacter::MoveForward(float Value)
 {
     if ((Controller != nullptr) && (Value != 0.0f))
@@ -219,158 +223,150 @@ void AWorldPlayerCharacter::MoveForward(float Value)
 }
 ```
 
-✅ **Camera System** (C++):
-```cpp
-// WorldPlayerCharacter.cpp - Constructor
-CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-```
-
-✅ **Character Movement** (C++):
-```cpp
-// WorldPlayerCharacter.cpp - Constructor
-GetCharacterMovement()->bOrientRotationToMovement = true;
-GetCharacterMovement()->MaxWalkSpeed = 600.0f;
-GetCharacterMovement()->BrakingDecelerationWalking = 2000.0f;
-```
-
-**No Blueprint logic is required!** Blueprints are only used to:
-1. Assign visual assets (mesh and animations)
-2. Optionally override default values
+**All FPS logic is in C++!** Blueprints only assign visual assets (optional).
 
 ---
 
-## Advanced Customization (Optional)
+## Verification Checklist
 
-### Adjusting Character Position/Rotation
+After setup, verify everything works:
 
-If the character mesh doesn't align properly, adjust in C++ or Blueprint:
+- [ ] Camera is at eye level (first-person view)
+- [ ] WASD movement works
+- [ ] Mouse look rotates camera
+- [ ] Character rotates with camera (not with movement direction)
+- [ ] Jump works
+- [ ] Arms/hands visible if configured (optional)
+- [ ] Body hidden/shown based on settings
+
+---
+
+## Gameplay Loop Confirmation
+
+**The entire gameplay loop is implemented in C++:**
+
+✅ **Input Handling** (C++):
+- Jump, MoveForward, MoveRight, Turn, LookUp
+
+✅ **Movement Logic** (C++):
+- Forward/backward based on camera direction
+- Strafing left/right
+- Jump mechanics
+
+✅ **Camera System** (C++):
+- First-person camera at eye level
+- Mouse look controls camera rotation
+- Character rotates with camera yaw
+
+✅ **Character Controller** (C++):
+- FPS movement style
+- Fast rotation rate
+- Controller rotation for yaw
+
+**No Blueprint logic required!** Blueprints only for optional visual assets.
+
+---
+
+## Adjusting Camera Height
+
+If camera feels too low/high:
 
 **In C++ (WorldPlayerCharacter.cpp):**
 ```cpp
-// Already configured for standard UE characters:
-GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -96.0f));
-GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+FirstPersonCamera->SetRelativeLocation(FVector(0.0f, 0.0f, 64.0f)); // Change Z value
+// 64.0f = eye height above capsule base
+// Increase for taller, decrease for shorter
 ```
 
 **In Blueprint:**
-- Open `BP_PlayerCharacter`
-- Select **Mesh** component
-- Adjust **Location** and **Rotation** in Transform section
-
-### Adjusting Camera Distance
-
-**In C++ (WorldPlayerCharacter.cpp):**
-```cpp
-CameraBoom->TargetArmLength = 400.0f; // Change to desired distance
-```
-
-**In Blueprint:**
-- Open `BP_PlayerCharacter`
-- Select **CameraBoom** component
-- Change **Target Arm Length**
-
-### Adjusting Movement Speed
-
-**In C++ (WorldPlayerCharacter.cpp):**
-```cpp
-GetCharacterMovement()->MaxWalkSpeed = 600.0f; // Change to desired speed
-```
-
-**In Blueprint:**
-- Open `BP_PlayerCharacter`
-- Find **Character Movement** component
-- Change **Max Walk Speed**
+- Open `BP_FPSCharacter`
+- Select **FirstPersonCamera** component
+- Adjust **Location Z** value
 
 ---
 
 ## Troubleshooting
 
-### Character is invisible
-**Problem**: No mesh assigned or mesh not set correctly
+### Camera feels wrong
+**Problem**: Camera height doesn't match character
 
 **Solution**:
-1. Check that **Character Mesh Asset** is set in BP_PlayerCharacter
-2. Verify the skeletal mesh imported correctly
-3. Check that mesh has materials assigned
+- Adjust `FirstPersonCamera` Z location
+- Typical values: 60-80 units for adult human
 
-### Character has no animations
-**Problem**: Animation Blueprint not assigned or not configured
-
-**Solution**:
-1. Check that **Animation Blueprint Class** is set in BP_PlayerCharacter
-2. Verify animation blueprint has animations imported
-3. Check skeleton matches between mesh and animations
-
-### Character mesh is rotated wrong
-**Problem**: Different character rigs have different default rotations
+### Can see inside character mesh
+**Problem**: Body mesh clips through camera
 
 **Solution**:
-1. Adjust **Mesh Rotation** in BP_PlayerCharacter
-2. Common values: -90° or 90° on Z-axis (Yaw)
+- Ensure `Show Body In First Person` is **False** if using full body
+- Or use arms-only mesh
+- Or adjust mesh position
 
-### Character slides instead of walking
-**Problem**: Animations not playing or speed mismatch
-
-**Solution**:
-1. Check animation blueprint state machine
-2. Verify character velocity is driving animation states
-3. Adjust animation playback speed to match movement speed
-
-### Camera is too close/far
-**Problem**: Default camera distance doesn't match your character
+### Character doesn't rotate with camera
+**Problem**: Movement goes wrong direction
 
 **Solution**:
-1. Adjust **CameraBoom > Target Arm Length**
-2. Typical values: 300-600 units
+- Verify `bUseControllerRotationYaw = true` in C++
+- Check that movement is based on controller rotation (already implemented)
+
+### Arms are invisible
+**Problem**: Arms mesh not showing
+
+**Solution**:
+- Check that `First Person Arms Mesh` is set
+- Verify `SetOwnerNoSee(false)` and `SetOnlyOwnerSee(true)` are called
+- Check mesh isn't scaled to 0 or positioned wrong
 
 ---
 
 ## Summary
 
-**Question 1: Can I have a visible player character with animations using store assets?**
-✅ **YES!** Very easily:
-- UE Third Person Template (5 min)
-- Mixamo (15 min, free)
-- UE Marketplace (varies, many free options)
+**Question: Is this a first-person game?**
+✅ **YES!** Fully implemented in C++:
+- First-person camera at eye level
+- FPS-style movement and rotation
+- Mouse look controls
+- Pure first-person by default (no visible body)
 
-**Question 2: Is the gameplay loop implemented in C++?**
-✅ **YES!** 100% implemented:
-- Input handling
-- Movement logic
-- Camera system
-- Jump mechanics
-- Character controller
+**Question: Can I add visible arms/hands?**
+✅ **YES! Optional:**
+- First Person Template (5 min)
+- Mixamo arms (20 min)
+- Full body visibility option
 
-**You only need to assign visual assets** - all gameplay code is complete in C++!
+**Question: Is gameplay in C++?**
+✅ **YES! 100% implemented:**
+- All input handling
+- All movement logic
+- All camera system
+- All FPS controls
 
 ---
 
 ## Resources
 
-### Free Character Sources
-- **Mixamo**: https://www.mixamo.com (Free, Adobe account)
-- **UE Marketplace**: https://www.unrealengine.com/marketplace (Filter: Free)
-- **Sketchfab**: https://sketchfab.com (Many free rigged characters)
+### Free First-Person Arms
+- **UE First Person Template** (Built-in)
+- **Mixamo**: https://www.mixamo.com (Free arms/hands)
+- **UE Marketplace**: Filter for "First Person" + "Free"
 
-### Unreal Engine Documentation
+### UE Documentation
+- **First Person Character**: https://docs.unrealengine.com/5.6/en-US/first-person-shooter-in-unreal-engine/
 - **Character Setup**: https://docs.unrealengine.com/5.6/en-US/character-setup-in-unreal-engine/
-- **Animation Blueprint**: https://docs.unrealengine.com/5.6/en-US/animation-blueprints-in-unreal-engine/
-- **Importing Characters**: https://docs.unrealengine.com/5.6/en-US/importing-skeletal-mesh-characters-in-unreal-engine/
 
 ### Project Documentation
-- **QUICK_START.md** - Get the project running
-- **PROJECT_OVERVIEW.md** - Understand the architecture
-- **TODO_ASSETS.md** - What assets to create
+- **QUICK_START.md** - Get project running
+- **PROJECT_OVERVIEW.md** - Architecture
+- **PROBLEM_STATEMENT_ANSWER.md** - Direct answers
 
 ---
 
 ## Next Steps
 
-1. **Choose your method** (Third Person Template recommended for quickest start)
-2. **Follow the steps** to add character mesh and animations
-3. **Test in Play mode**
-4. **Customize** appearance, animations, and settings as desired
-5. **Start building your game!** All gameplay systems are ready in C++
+1. **Basic Setup**: Follow **QUICK_START.md** (10 min)
+2. **Test First-Person**: Press Play - it already works!
+3. **Optional**: Add arms/hands following this guide (5-20 min)
+4. **Customize**: Adjust camera height, movement speed, etc.
+5. **Start Building**: Add weapons, interactions, gameplay!
 
-Happy developing! 🎮
+The FPS foundation is complete in C++! 🎮
