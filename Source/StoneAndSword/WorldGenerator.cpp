@@ -173,13 +173,21 @@ float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
 	float MaxValue = 0.0f; // Used for normalization
 
 	// Apply random seed offset to make different seeds produce different terrain
-	FVector SeedOffset = FVector(RandomSeed * 0.1f, RandomSeed * 0.2f, RandomSeed * 0.3f);
+	// Using prime number multipliers for better distribution
+	const float SeedOffsetX = RandomSeed * 0.1031f;
+	const float SeedOffsetY = RandomSeed * 0.1030f;
+	const float SeedOffsetZ = RandomSeed * 0.0973f;
 
 	// Add multiple octaves of Perlin noise
 	for (int32 Octave = 0; Octave < NoiseOctaves; Octave++)
 	{
 		// Sample 3D Perlin noise (using Z=0 for 2D-like terrain)
-		FVector SamplePos = FVector(X * Frequency, Y * Frequency, 0.0f) + SeedOffset;
+		// Add octave-specific offset for variation between octaves
+		FVector SamplePos = FVector(
+			X * Frequency + SeedOffsetX + Octave * 100.0f,
+			Y * Frequency + SeedOffsetY + Octave * 100.0f,
+			SeedOffsetZ + Octave * 100.0f
+		);
 		float NoiseValue = FMath::PerlinNoise3D(SamplePos);
 		
 		// PerlinNoise3D returns values roughly in [-1, 1], so we don't need additional scaling
