@@ -51,28 +51,30 @@ void AWorldPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// Configure body mesh visibility for first-person
-	if (GetMesh())
-	{
-		GetMesh()->SetOwnerNoSee(!bShowBodyInFirstPerson);
-	}
-	
 	// Apply first-person arms mesh if set
 	if (FirstPersonArmsMesh && GetMesh())
 	{
-		// Note: For proper first-person arms, you would typically create a separate
-		// USkeletalMeshComponent attached to the camera. This is a simplified approach
-		// where we're using the main mesh. For production, consider creating a dedicated
-		// FirstPersonArmsMesh component attached to FirstPersonCamera.
+		// Note: For a more robust implementation, consider creating a dedicated
+		// USkeletalMeshComponent for first-person arms attached to the camera.
+		// This simplified approach uses the main mesh for arms.
 		GetMesh()->SetSkeletalMesh(FirstPersonArmsMesh);
-		GetMesh()->SetOwnerNoSee(false); // Show arms mesh to owner
-		GetMesh()->SetOnlyOwnerSee(true); // Hide arms from other players
+		GetMesh()->SetOwnerNoSee(false); // Show arms to owner
+		GetMesh()->SetOnlyOwnerSee(true); // Hide from others (for multiplayer)
+		
+		// Apply animation blueprint for arms
+		if (FirstPersonArmsAnimationClass)
+		{
+			GetMesh()->SetAnimInstanceClass(FirstPersonArmsAnimationClass);
+		}
 	}
-	
-	// Apply animation blueprint if set
-	if (FirstPersonArmsAnimationClass && GetMesh())
+	else
 	{
-		GetMesh()->SetAnimInstanceClass(FirstPersonArmsAnimationClass);
+		// No arms mesh set - configure body mesh visibility
+		if (GetMesh())
+		{
+			// Hide body in first-person unless explicitly enabled
+			GetMesh()->SetOwnerNoSee(!bShowBodyInFirstPerson);
+		}
 	}
 }
 
