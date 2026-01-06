@@ -12,7 +12,7 @@ class UMaterialInterface;
 
 /**
  * Biome types for procedural world generation
- * Each biome represents a large, distinct world area/scene
+ * Each biome represents a large continent on the planet
  */
 UENUM(BlueprintType)
 enum class EBiomeType : uint8
@@ -32,14 +32,14 @@ enum class EBiomeType : uint8
 };
 
 /**
- * Biome data structure containing terrain properties for large-scale biome worlds
+ * Biome data structure containing terrain properties for continental biomes
  */
 USTRUCT(BlueprintType)
 struct FBiomeData
 {
 	GENERATED_BODY()
 
-	/** Display name of the biome */
+	/** Display name of the biome continent */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
 	FString BiomeName;
 
@@ -59,29 +59,24 @@ struct FBiomeData
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
 	float TerrainRoughness = 1.0f;
 
-	/** Map/Scene name for this biome world */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
-	FString SceneName;
-
 	FBiomeData() = default;
 
 	FBiomeData(const FString& InName, float InHeightMultiplier, const FLinearColor& InColor, 
-		float InBaseOffset = 0.0f, float InRoughness = 1.0f, const FString& InSceneName = TEXT(""))
+		float InBaseOffset = 0.0f, float InRoughness = 1.0f)
 		: BiomeName(InName)
 		, HeightMultiplier(InHeightMultiplier)
 		, BaseHeightOffset(InBaseOffset)
 		, BiomeColor(InColor)
 		, TerrainRoughness(InRoughness)
-		, SceneName(InSceneName)
 	{
 	}
 };
 
 /**
- * Procedural world generator that creates terrain for large-scale biome worlds.
- * Each biome is a huge, distinct area that functions as its own world map/scene.
- * Players traverse between biomes using boat/ferry systems (implemented separately).
- * Supports 10+ distinct biome types with unique terrain characteristics.
+ * Procedural world generator that creates a planetary terrain system with continental biomes.
+ * Generates a continuous world where each continent represents a distinct biome type.
+ * Uses temperature and moisture gradients to distribute biomes across the planet naturally.
+ * Supports seamless transitions between continental biomes with ocean/water boundaries.
  */
 UCLASS()
 class STONEANDSWORD_API AWorldGenerator : public AActor
@@ -166,17 +161,25 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation")
 	int32 RandomSeed;
 
-	/** Current biome type for this world instance */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biomes")
-	EBiomeType CurrentBiome;
+	/** Enable continental biome system for planetary generation */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Planetary Biomes")
+	bool bEnablePlanetaryBiomes;
 
-	/** World size multiplier for huge biomes (multiplies base world size) */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biomes", meta = (ClampMin = "1.0", ClampMax = "10.0"))
-	float BiomeWorldSizeMultiplier;
+	/** Temperature gradient noise scale - affects continental distribution */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Planetary Biomes", meta = (ClampMin = "0.0001", ClampMax = "0.01", EditCondition = "bEnablePlanetaryBiomes"))
+	float TemperatureNoiseScale;
 
-	/** Enable biome-specific terrain generation */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biomes")
-	bool bUseBiomeSpecificGeneration;
+	/** Moisture gradient noise scale - affects biome distribution */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Planetary Biomes", meta = (ClampMin = "0.0001", ClampMax = "0.01", EditCondition = "bEnablePlanetaryBiomes"))
+	float MoistureNoiseScale;
+
+	/** Continental scale - controls size of biome continents */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Planetary Biomes", meta = (ClampMin = "0.0001", ClampMax = "0.005", EditCondition = "bEnablePlanetaryBiomes"))
+	float ContinentalScale;
+
+	/** Biome transition blend distance (0-1, higher = smoother transitions) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Planetary Biomes", meta = (ClampMin = "0.0", ClampMax = "1.0", EditCondition = "bEnablePlanetaryBiomes"))
+	float BiomeBlendFactor;
 
 	/** Auto-generate world on begin play */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation")
@@ -198,6 +201,18 @@ private:
 	/** Get biome data for a specific biome type */
 	FBiomeData GetBiomeData(EBiomeType BiomeType) const;
 
-	/** Apply biome-specific effects to height calculation */
-	float ApplyBiomeModifiers(float BaseHeight, float X, float Y) const;
+	/** Determine biome type at a given world position based on temperature and moisture */
+	EBiomeType DetermineBiomeAtPosition(float X, float Y) const;
+
+	/** Calculate temperature value at a given position (0-1 range, affects biome distribution) */
+	float CalculateTemperature(float X, float Y) const;
+
+	/** Calculate moisture value at a given position (0-1 range, affects biome distribution) */
+	float CalculateMoisture(float X, float Y) const;
+
+	/** Apply biome-specific effects to height calculation with smooth blending */
+	float ApplyBiomeModifiers(float BaseHeight, float X, float Y, EBiomeType BiomeType) const;
+
+	/** Blend between multiple biomes for smooth continental transitions */
+	void BlendBiomeEffects(float X, float Y, float& Height, FLinearColor& Color) const;
 };

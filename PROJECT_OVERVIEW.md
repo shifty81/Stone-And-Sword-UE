@@ -157,10 +157,14 @@ UObject (Unreal Engine Base)
 
 ### 🌍 World Generation System
 - **Procedural Mesh Generation**: Uses UProceduralMeshComponent for runtime terrain
+- **12 Distinct Biome Types**: Tropical Jungle, Temperate Forest, Boreal Taiga, Grasslands, Savanna, Desert, Tundra, Arctic Snow, Mountains, Volcanic Wasteland, Swampland, Rocky Badlands
+- **Large-Scale Biome Worlds**: Each biome is a huge world map (3-10x base size) designed as separate scenes
 - **Perlin Noise Algorithm**: Industry-standard Perlin noise with Fractional Brownian Motion (fBM)
-- **Configurable Parameters**: Size, resolution, height, noise scale, octaves, persistence, lacunarity, random seed
+- **Biome-Specific Characteristics**: Unique height multipliers, colors, roughness, and elevations per biome
+- **Configurable Parameters**: Size, resolution, height, noise scale, octaves, persistence, lacunarity, biome type, world size multiplier, random seed
 - **Multi-Octave Detail**: Adjustable detail levels (1-8 octaves) for realistic terrain
 - **Performance**: Grid-based generation with customizable detail levels
+- **Multi-Scene Architecture**: Prepared for boat/ferry traversal between biome worlds
 - **Extensible**: Easy to add biomes, vegetation, and advanced features
 
 ### 🎮 Player Controller
@@ -202,12 +206,15 @@ UObject (Unreal Engine Base)
 
 ### Easy to Add
 - ✅ **Already Implemented**: Perlin noise terrain generation with Fractional Brownian Motion
+- ✅ **Already Implemented**: 12 distinct biome types with unique characteristics
+- ✅ **Already Implemented**: Large-scale biome worlds with size multipliers
+- ✅ Boat/ferry travel system between biomes (framework ready)
 - ✅ More complex terrain algorithms (Diamond-Square, Ridged noise, etc.)
 - ✅ Multiple biomes with smooth transitions
-- ✅ Water bodies and rivers
-- ✅ Vegetation spawning system
+- ✅ Water bodies and rivers (especially for biome boundaries)
+- ✅ Vegetation spawning system (biome-specific)
 - ✅ Building placement system
-- ✅ Dynamic weather
+- ✅ Dynamic weather (biome-specific)
 - ✅ Day/night cycle
 
 ### Requires More Work

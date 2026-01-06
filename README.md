@@ -189,9 +189,12 @@ This repository also contains **comprehensive documentation** for transitioning 
 
 - 🌍 **Procedural World Generation**
   - Port of existing UE system
-  - Configurable terrain
+  - 12 distinct biome types (Tropical Jungle, Desert, Mountains, etc.)
+  - Huge biome worlds (3-10x scalable)
   - Perlin noise-based height maps (Fractional Brownian Motion)
   - Multi-octave detail control
+  - Biome-specific terrain characteristics
+  - Multi-scene architecture for boat/ferry traversal
   - Material splatting
 
 - 🎮 **Character Controller**

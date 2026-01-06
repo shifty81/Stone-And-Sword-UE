@@ -194,11 +194,19 @@ Edit settings in WorldGenerator class or via the editor:
 - **Noise Lacunarity**: Frequency multiplier between octaves (1.0-4.0, default: 2.0)
 - **Random Seed**: Change to generate different terrain layouts
 
-**New Perlin Noise Parameters:**
-The terrain now uses proper Perlin noise (Fractional Brownian Motion) for realistic landscapes:
+**Perlin Noise Parameters:**
+The terrain uses proper Perlin noise (Fractional Brownian Motion) for realistic landscapes:
 - Higher octaves add more fine detail but may impact performance
 - Lower persistence creates smoother terrain
 - Higher lacunarity creates more varied, rougher terrain
+
+**Biome System (NEW):**
+Choose from 12 distinct biome types for huge world maps:
+- **Current Biome**: Select which biome to generate (Tropical Jungle, Temperate Forest, Boreal Taiga, Grasslands, Savanna, Desert, Tundra, Arctic Snow, Mountains, Volcanic Wasteland, Swampland, Rocky Badlands)
+- **Biome World Size Multiplier**: Makes biomes larger (1.0-10.0x, default: 3.0x)
+- **Use Biome Specific Generation**: Enables biome-specific terrain modifiers
+
+Each biome is designed as a huge, separate world map/scene. Players traverse between biomes using boat/ferry systems (to be implemented in gameplay).
 
 ### Character Settings
 

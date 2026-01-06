@@ -27,10 +27,12 @@ AWorldGenerator::AWorldGenerator()
 	bAutoGenerateOnBeginPlay = true;
 	TerrainMaterial = nullptr;
 
-	// Biome settings for huge world maps
-	CurrentBiome = EBiomeType::Grasslands;
-	BiomeWorldSizeMultiplier = 3.0f;  // Makes biomes 3x larger by default
-	bUseBiomeSpecificGeneration = true;
+	// Planetary biome settings for continuous world with continental biomes
+	bEnablePlanetaryBiomes = true;
+	TemperatureNoiseScale = 0.002f;  // Large-scale temperature gradients
+	MoistureNoiseScale = 0.003f;     // Large-scale moisture patterns
+	ContinentalScale = 0.001f;       // Very large continental formations
+	BiomeBlendFactor = 0.3f;         // Smooth transitions between biomes
 
 	// Enable collision for the procedural mesh
 	ProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
@@ -115,10 +117,7 @@ void AWorldGenerator::GenerateTerrainMesh(TArray<FVector>& Vertices, TArray<int3
 	// Initialize random stream
 	FRandomStream RandomStream(RandomSeed);
 
-	// Get current biome data
-	FBiomeData BiomeData = GetBiomeData(CurrentBiome);
-
-	// Generate vertices
+	// Generate vertices with planetary biome blending
 	for (int32 Y = 0; Y < NumVerticesY; Y++)
 	{
 		for (int32 X = 0; X < NumVerticesX; X++)
@@ -138,11 +137,20 @@ void AWorldGenerator::GenerateTerrainMesh(TArray<FVector>& Vertices, TArray<int3
 			// Add normal (pointing up for flat terrain)
 			Normals.Add(FVector(0.0f, 0.0f, 1.0f));
 
-			// Add vertex color based on biome color and height
-			FLinearColor BaseColor = BiomeData.BiomeColor;
-			float HeightFactor = FMath::Clamp((Height + 100.0f) / 200.0f, 0.0f, 1.0f);
-			FLinearColor FinalColor = BaseColor * (0.5f + HeightFactor * 0.5f);
-			VertexColors.Add(FinalColor.ToFColor(false));
+			// Determine biome and color for this position
+			FLinearColor VertexColor = FLinearColor::White;
+			if (bEnablePlanetaryBiomes)
+			{
+				BlendBiomeEffects(WorldX, WorldY, Height, VertexColor);
+			}
+			else
+			{
+				// Default coloring based on height
+				float HeightFactor = FMath::Clamp((Height + 100.0f) / 200.0f, 0.0f, 1.0f);
+				VertexColor = FLinearColor(0.4f, 0.8f, 0.3f) * (0.5f + HeightFactor * 0.5f);
+			}
+			
+			VertexColors.Add(VertexColor.ToFColor(false));
 		}
 	}
 
@@ -221,10 +229,11 @@ float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
 		Height = (Height / MaxValue) * HeightVariation;
 	}
 
-	// Apply biome-specific modifiers if enabled
-	if (bUseBiomeSpecificGeneration)
+	// Apply planetary biome-specific modifiers if enabled
+	if (bEnablePlanetaryBiomes)
 	{
-		Height = ApplyBiomeModifiers(Height, X, Y);
+		EBiomeType BiomeAtPos = DetermineBiomeAtPosition(X, Y);
+		Height = ApplyBiomeModifiers(Height, X, Y, BiomeAtPos);
 	}
 
 	return Height;
@@ -233,53 +242,128 @@ float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
 FBiomeData AWorldGenerator::GetBiomeData(EBiomeType BiomeType) const
 {
 	// Define characteristics for each of the 12 biome types
-	// Each biome is designed to be a huge, distinct world area
+	// Each biome represents a continental region on the planet
 	switch (BiomeType)
 	{
 		case EBiomeType::TropicalJungle:
-			return FBiomeData(TEXT("Tropical Jungle"), 1.5f, FLinearColor(0.1f, 0.6f, 0.2f), 0.0f, 2.0f, TEXT("TropicalJungle"));
+			return FBiomeData(TEXT("Tropical Jungle"), 1.5f, FLinearColor(0.1f, 0.6f, 0.2f), 0.0f, 2.0f);
 		
 		case EBiomeType::TemperateForest:
-			return FBiomeData(TEXT("Temperate Forest"), 1.2f, FLinearColor(0.3f, 0.7f, 0.3f), 0.0f, 1.5f, TEXT("TemperateForest"));
+			return FBiomeData(TEXT("Temperate Forest"), 1.2f, FLinearColor(0.3f, 0.7f, 0.3f), 0.0f, 1.5f);
 		
 		case EBiomeType::BorealTaiga:
-			return FBiomeData(TEXT("Boreal Taiga"), 1.0f, FLinearColor(0.2f, 0.5f, 0.3f), 0.0f, 1.3f, TEXT("BorealTaiga"));
+			return FBiomeData(TEXT("Boreal Taiga"), 1.0f, FLinearColor(0.2f, 0.5f, 0.3f), 0.0f, 1.3f);
 		
 		case EBiomeType::Grasslands:
-			return FBiomeData(TEXT("Grasslands"), 0.5f, FLinearColor(0.4f, 0.8f, 0.3f), 0.0f, 0.5f, TEXT("Grasslands"));
+			return FBiomeData(TEXT("Grasslands"), 0.5f, FLinearColor(0.4f, 0.8f, 0.3f), 0.0f, 0.5f);
 		
 		case EBiomeType::Savanna:
-			return FBiomeData(TEXT("Savanna"), 0.8f, FLinearColor(0.7f, 0.7f, 0.3f), 0.0f, 1.0f, TEXT("Savanna"));
+			return FBiomeData(TEXT("Savanna"), 0.8f, FLinearColor(0.7f, 0.7f, 0.3f), 0.0f, 1.0f);
 		
 		case EBiomeType::Desert:
-			return FBiomeData(TEXT("Desert"), 1.2f, FLinearColor(0.9f, 0.8f, 0.5f), 0.0f, 1.8f, TEXT("Desert"));
+			return FBiomeData(TEXT("Desert"), 1.2f, FLinearColor(0.9f, 0.8f, 0.5f), 0.0f, 1.8f);
 		
 		case EBiomeType::Tundra:
-			return FBiomeData(TEXT("Tundra"), 0.6f, FLinearColor(0.6f, 0.7f, 0.7f), 0.0f, 0.8f, TEXT("Tundra"));
+			return FBiomeData(TEXT("Tundra"), 0.6f, FLinearColor(0.6f, 0.7f, 0.7f), 0.0f, 0.8f);
 		
 		case EBiomeType::ArcticSnow:
-			return FBiomeData(TEXT("Arctic Snow"), 1.5f, FLinearColor(0.9f, 0.95f, 1.0f), 50.0f, 2.0f, TEXT("ArcticSnow"));
+			return FBiomeData(TEXT("Arctic Snow"), 1.5f, FLinearColor(0.9f, 0.95f, 1.0f), 50.0f, 2.0f);
 		
 		case EBiomeType::Mountains:
-			return FBiomeData(TEXT("Mountains"), 3.0f, FLinearColor(0.5f, 0.5f, 0.5f), 100.0f, 3.0f, TEXT("Mountains"));
+			return FBiomeData(TEXT("Mountains"), 3.0f, FLinearColor(0.5f, 0.5f, 0.5f), 100.0f, 3.0f);
 		
 		case EBiomeType::VolcanicWasteland:
-			return FBiomeData(TEXT("Volcanic Wasteland"), 2.5f, FLinearColor(0.4f, 0.2f, 0.1f), 20.0f, 2.5f, TEXT("VolcanicWasteland"));
+			return FBiomeData(TEXT("Volcanic Wasteland"), 2.5f, FLinearColor(0.4f, 0.2f, 0.1f), 20.0f, 2.5f);
 		
 		case EBiomeType::Swampland:
-			return FBiomeData(TEXT("Swampland"), 0.4f, FLinearColor(0.3f, 0.4f, 0.3f), -20.0f, 1.2f, TEXT("Swampland"));
+			return FBiomeData(TEXT("Swampland"), 0.4f, FLinearColor(0.3f, 0.4f, 0.3f), -20.0f, 1.2f);
 		
 		case EBiomeType::RockyBadlands:
-			return FBiomeData(TEXT("Rocky Badlands"), 2.0f, FLinearColor(0.6f, 0.4f, 0.3f), 30.0f, 2.2f, TEXT("RockyBadlands"));
+			return FBiomeData(TEXT("Rocky Badlands"), 2.0f, FLinearColor(0.6f, 0.4f, 0.3f), 30.0f, 2.2f);
 		
 		default:
-			return FBiomeData(TEXT("Default"), 1.0f, FLinearColor::White, 0.0f, 1.0f, TEXT("Default"));
+			return FBiomeData(TEXT("Default"), 1.0f, FLinearColor::White, 0.0f, 1.0f);
 	}
 }
 
-float AWorldGenerator::ApplyBiomeModifiers(float BaseHeight, float X, float Y) const
+EBiomeType AWorldGenerator::DetermineBiomeAtPosition(float X, float Y) const
 {
-	FBiomeData BiomeData = GetBiomeData(CurrentBiome);
+	// Calculate temperature and moisture at this position
+	float Temperature = CalculateTemperature(X, Y);
+	float Moisture = CalculateMoisture(X, Y);
+
+	// Use temperature-moisture matrix to determine biome
+	// Temperature: 0 (cold) to 1 (hot)
+	// Moisture: 0 (dry) to 1 (wet)
+
+	if (Temperature < 0.2f)
+	{
+		// Cold regions
+		if (Moisture < 0.3f) return EBiomeType::Tundra;
+		else return EBiomeType::ArcticSnow;
+	}
+	else if (Temperature < 0.4f)
+	{
+		// Cool temperate
+		if (Moisture < 0.3f) return EBiomeType::Grasslands;
+		else if (Moisture < 0.7f) return EBiomeType::BorealTaiga;
+		else return EBiomeType::Swampland;
+	}
+	else if (Temperature < 0.6f)
+	{
+		// Moderate temperate
+		if (Moisture < 0.4f) return EBiomeType::Grasslands;
+		else if (Moisture < 0.7f) return EBiomeType::TemperateForest;
+		else return EBiomeType::Swampland;
+	}
+	else if (Temperature < 0.8f)
+	{
+		// Warm
+		if (Moisture < 0.3f) return EBiomeType::Desert;
+		else if (Moisture < 0.6f) return EBiomeType::Savanna;
+		else return EBiomeType::TropicalJungle;
+	}
+	else
+	{
+		// Hot
+		if (Moisture < 0.4f) return EBiomeType::VolcanicWasteland;
+		else if (Moisture < 0.7f) return EBiomeType::Savanna;
+		else return EBiomeType::TropicalJungle;
+	}
+}
+
+float AWorldGenerator::CalculateTemperature(float X, float Y) const
+{
+	// Use large-scale noise for continental temperature patterns
+	FVector TempSample = FVector(X * TemperatureNoiseScale, Y * TemperatureNoiseScale, RandomSeed * 0.7f);
+	float TempNoise = FMath::PerlinNoise3D(TempSample);
+	
+	// Convert from [-1, 1] to [0, 1]
+	float Temperature = (TempNoise + 1.0f) * 0.5f;
+	
+	// Add latitude-based gradient (colder towards edges, warmer in middle)
+	float NormalizedY = FMath::Abs(Y / WorldSizeY);
+	float LatitudeEffect = 1.0f - FMath::Pow(NormalizedY, 2.0f);
+	Temperature = Temperature * 0.6f + LatitudeEffect * 0.4f;
+	
+	return FMath::Clamp(Temperature, 0.0f, 1.0f);
+}
+
+float AWorldGenerator::CalculateMoisture(float X, float Y) const
+{
+	// Use large-scale noise for continental moisture patterns
+	FVector MoistureSample = FVector(X * MoistureNoiseScale, Y * MoistureNoiseScale, RandomSeed * 1.3f);
+	float MoistureNoise = FMath::PerlinNoise3D(MoistureSample);
+	
+	// Convert from [-1, 1] to [0, 1]
+	float Moisture = (MoistureNoise + 1.0f) * 0.5f;
+	
+	return FMath::Clamp(Moisture, 0.0f, 1.0f);
+}
+
+float AWorldGenerator::ApplyBiomeModifiers(float BaseHeight, float X, float Y, EBiomeType BiomeType) const
+{
+	FBiomeData BiomeData = GetBiomeData(BiomeType);
 	
 	// Apply biome-specific height multiplier and base offset
 	float ModifiedHeight = (BaseHeight * BiomeData.HeightMultiplier) + BiomeData.BaseHeightOffset;
@@ -294,4 +378,18 @@ float AWorldGenerator::ApplyBiomeModifiers(float BaseHeight, float X, float Y) c
 	}
 	
 	return ModifiedHeight;
+}
+
+void AWorldGenerator::BlendBiomeEffects(float X, float Y, float& Height, FLinearColor& Color) const
+{
+	// Determine primary biome at this position
+	EBiomeType PrimaryBiome = DetermineBiomeAtPosition(X, Y);
+	FBiomeData PrimaryData = GetBiomeData(PrimaryBiome);
+	
+	// Apply biome color based on height
+	float HeightFactor = FMath::Clamp((Height + 100.0f) / 200.0f, 0.0f, 1.0f);
+	Color = PrimaryData.BiomeColor * (0.5f + HeightFactor * 0.5f);
+	
+	// TODO: Add smooth blending between adjacent biomes using BiomeBlendFactor
+	// This would sample neighboring positions and blend colors/heights for smoother transitions
 }
