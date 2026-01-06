@@ -13,6 +13,9 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 ### I Want to Get Started RIGHT NOW! ⚡
 → **[QUICK_START.md](QUICK_START.md)** - 10-minute fast track to a playable scene
 
+### I Want to Add a Visible Character with Animations! 🎮
+→ **[CHARACTER_SETUP_GUIDE.md](CHARACTER_SETUP_GUIDE.md)** - Add visible character using store assets (5-15 min)
+
 ### I Want Automated Setup 🤖
 → **[Content/Python/README.md](Content/Python/README.md)** - Python script for automatic asset creation
 
@@ -44,6 +47,7 @@ Welcome to the Stone and Sword Unreal Engine 5.6 project! This index will help y
 | [WHATS_LEFT.md](WHATS_LEFT.md) | What's needed for UE | 2 min | Answers: "Can I edit this project?" |
 | [Content/Python/README.md](Content/Python/README.md) | Automated asset creation | 5 min | When you want automatic setup |
 | [QUICK_START.md](QUICK_START.md) | Get playing fast | 10 min | When you want immediate results |
+| [CHARACTER_SETUP_GUIDE.md](CHARACTER_SETUP_GUIDE.md) | Add visible character | 5-15 min | Add character mesh & animations with store assets |
 | [TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md) | Fix build errors | 5-30 min | When compilation fails |
 | [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) | Complete setup guide | 30-60 min | When you want to understand everything |
 | [VERIFICATION_CHECKLIST.md](VERIFICATION_CHECKLIST.md) | Verify everything works | 15 min | After setup to confirm success |

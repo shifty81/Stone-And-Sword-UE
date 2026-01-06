@@ -3,8 +3,10 @@
 #include "WorldPlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Animation/AnimInstance.h"
 
 AWorldPlayerCharacter::AWorldPlayerCharacter()
 {
@@ -14,6 +16,11 @@ AWorldPlayerCharacter::AWorldPlayerCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
+	// Configure the character mesh (inherited from ACharacter)
+	// Position and rotate mesh to align with capsule
+	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -96.0f));
+	GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	
 	// Don't rotate when the controller rotates
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -38,11 +45,27 @@ AWorldPlayerCharacter::AWorldPlayerCharacter()
 	CameraComponent->bUsePawnControlRotation = false;
 
 	MovementSpeedMultiplier = 1.0f;
+	
+	// Initialize mesh and animation properties (can be set in editor or blueprint)
+	CharacterMeshAsset = nullptr;
+	AnimationBlueprintClass = nullptr;
 }
 
 void AWorldPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	// Apply character mesh if set
+	if (CharacterMeshAsset && GetMesh())
+	{
+		GetMesh()->SetSkeletalMesh(CharacterMeshAsset);
+	}
+	
+	// Apply animation blueprint if set
+	if (AnimationBlueprintClass && GetMesh())
+	{
+		GetMesh()->SetAnimInstanceClass(AnimationBlueprintClass);
+	}
 }
 
 void AWorldPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
