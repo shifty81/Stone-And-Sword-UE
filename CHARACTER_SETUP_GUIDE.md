@@ -8,31 +8,56 @@ The **WorldPlayerCharacter** is fully implemented in C++ as a **first-person cha
 - ✅ Mouse look/camera rotation
 - ✅ Jump mechanics
 - ✅ All gameplay logic in C++
+- ✅ **Body visibility enabled by default** - Character meshes are now visible when assigned!
 
-This guide shows you how to optionally add **visible first-person arms/hands with animations** using free store assets.
-
-## Quick Answer
-
-**YES!** This is a **first-person game**. The character is already functional as pure first-person (no visible body).
-
-You can optionally add:
-1. **First-person arms/hands** - For holding weapons, tools, etc.
-2. **Full body visibility** - To see your own legs and body in first-person
-
-**The entire gameplay loop is already implemented in C++** - you just need to assign visual assets if you want them!
+This guide shows you how to add **visible character models** using custom Blender files or free store assets.
 
 ---
 
-## Default Configuration (Pure First-Person)
+## 🆕 NEW: Using Custom Blender Character Models (Recommended!)
 
-By default, the character works in **pure first-person mode**:
+If you have custom character models from Blender (like male.blend and female.blend):
+
+### Quick Setup (15-20 minutes)
+
+1. **Place your Blender files** in `Content/Player/` folder
+2. **Follow the detailed import guide**: See `Content/Player/README.md`
+3. **Import into Unreal Engine** - Blender files import directly!
+4. **Create character blueprints** for male/female characters
+5. **Set as default pawn** in Project Settings
+6. **Press Play** and see your character!
+
+**✅ Body visibility is now enabled by default** - Your character will be visible in first-person view when you look down!
+
+For complete step-by-step instructions, see: **[Content/Player/README.md](Content/Player/README.md)**
+
+---
+
+## Quick Answer
+
+**YES!** This is a **first-person game**. The character is already functional with full first-person controls.
+
+**🆕 UPDATE**: Character body visibility is now **enabled by default**! When you assign a character mesh, you'll be able to see your body when looking down (like in games such as Minecraft or Mirror's Edge).
+
+You can add:
+1. **Custom Blender models** - Import your male.blend/female.blend files (See Content/Player/README.md)
+2. **First-person arms/hands** - For holding weapons, tools, etc. (Optional)
+3. **Store assets** - Use free assets from Mixamo or UE Marketplace
+
+**The entire gameplay loop is already implemented in C++** - you just need to assign visual assets!
+
+---
+
+## Default Configuration
+
+**🆕 Updated**: The character now works in **first-person mode with visible body enabled**:
 - ✅ Camera at eye level
-- ✅ No visible body (like classic FPS games)
+- ✅ **Body visible when you look down** (when mesh is assigned)
 - ✅ WASD movement
 - ✅ Mouse look
 - ✅ Jump
 
-**Press Play and it works immediately!** No additional setup required for basic FPS gameplay.
+**Press Play and it works immediately!** Add a character mesh to see your body in first-person view.
 
 ---
 
@@ -155,27 +180,26 @@ If you want to see your own body (legs, torso) in first-person:
 
 ## Configuration Options
 
-### Pure First-Person (Default)
+### 🆕 First-Person with Full Body (New Default!)
 ```
-Show Body In First Person: ❌ False
-First Person Arms Mesh: (none)
-Result: No visible body, classic FPS style
+Show Body In First Person: ✅ True (Default)
+Character Mesh: SK_Male or SK_Female (from Blender import)
+Result: Can see your own legs and body in first-person
 ```
 
-### First-Person with Arms
+### First-Person with Arms Only
 ```
 Show Body In First Person: ❌ False  
 First Person Arms Mesh: SK_FirstPersonArms
 First Person Arms Animation Class: ABP_FirstPersonArms
-Result: Visible hands/arms, no body
+Result: Visible hands/arms only, no body
 ```
 
-### First-Person with Full Body
+### Pure First-Person (Classic FPS)
 ```
-Show Body In First Person: ✅ True
-First Person Arms Mesh: SK_FullCharacter
-First Person Arms Animation Class: ABP_Character
-Result: Can see your own legs and body
+Show Body In First Person: ❌ False
+First Person Arms Mesh: (none)
+Result: No visible body, classic FPS style (like Doom/Quake)
 ```
 
 ---
