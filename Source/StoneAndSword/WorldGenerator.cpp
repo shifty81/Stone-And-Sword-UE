@@ -288,6 +288,17 @@ FBiomeData AWorldGenerator::GetBiomeData(EBiomeType BiomeType) const
 
 EBiomeType AWorldGenerator::DetermineBiomeAtPosition(float X, float Y) const
 {
+	// Temperature and moisture thresholds for biome classification
+	static constexpr float TEMP_VERY_COLD = 0.2f;
+	static constexpr float TEMP_COOL = 0.4f;
+	static constexpr float TEMP_MODERATE = 0.6f;
+	static constexpr float TEMP_WARM = 0.8f;
+	
+	static constexpr float MOISTURE_DRY = 0.3f;
+	static constexpr float MOISTURE_MODERATE = 0.4f;
+	static constexpr float MOISTURE_HUMID = 0.6f;
+	static constexpr float MOISTURE_WET = 0.7f;
+
 	// Calculate temperature and moisture at this position
 	float Temperature = CalculateTemperature(X, Y);
 	float Moisture = CalculateMoisture(X, Y);
@@ -296,38 +307,38 @@ EBiomeType AWorldGenerator::DetermineBiomeAtPosition(float X, float Y) const
 	// Temperature: 0 (cold) to 1 (hot)
 	// Moisture: 0 (dry) to 1 (wet)
 
-	if (Temperature < 0.2f)
+	if (Temperature < TEMP_VERY_COLD)
 	{
 		// Cold regions
-		if (Moisture < 0.3f) return EBiomeType::Tundra;
+		if (Moisture < MOISTURE_DRY) return EBiomeType::Tundra;
 		else return EBiomeType::ArcticSnow;
 	}
-	else if (Temperature < 0.4f)
+	else if (Temperature < TEMP_COOL)
 	{
 		// Cool temperate
-		if (Moisture < 0.3f) return EBiomeType::Grasslands;
-		else if (Moisture < 0.7f) return EBiomeType::BorealTaiga;
+		if (Moisture < MOISTURE_DRY) return EBiomeType::Grasslands;
+		else if (Moisture < MOISTURE_WET) return EBiomeType::BorealTaiga;
 		else return EBiomeType::Swampland;
 	}
-	else if (Temperature < 0.6f)
+	else if (Temperature < TEMP_MODERATE)
 	{
 		// Moderate temperate
-		if (Moisture < 0.4f) return EBiomeType::Grasslands;
-		else if (Moisture < 0.7f) return EBiomeType::TemperateForest;
+		if (Moisture < MOISTURE_MODERATE) return EBiomeType::Grasslands;
+		else if (Moisture < MOISTURE_WET) return EBiomeType::TemperateForest;
 		else return EBiomeType::Swampland;
 	}
-	else if (Temperature < 0.8f)
+	else if (Temperature < TEMP_WARM)
 	{
 		// Warm
-		if (Moisture < 0.3f) return EBiomeType::Desert;
-		else if (Moisture < 0.6f) return EBiomeType::Savanna;
+		if (Moisture < MOISTURE_DRY) return EBiomeType::Desert;
+		else if (Moisture < MOISTURE_HUMID) return EBiomeType::Savanna;
 		else return EBiomeType::TropicalJungle;
 	}
 	else
 	{
 		// Hot
-		if (Moisture < 0.4f) return EBiomeType::VolcanicWasteland;
-		else if (Moisture < 0.7f) return EBiomeType::Savanna;
+		if (Moisture < MOISTURE_MODERATE) return EBiomeType::VolcanicWasteland;
+		else if (Moisture < MOISTURE_WET) return EBiomeType::Savanna;
 		else return EBiomeType::TropicalJungle;
 	}
 }
@@ -363,6 +374,12 @@ float AWorldGenerator::CalculateMoisture(float X, float Y) const
 
 float AWorldGenerator::ApplyBiomeModifiers(float BaseHeight, float X, float Y, EBiomeType BiomeType) const
 {
+	// Constants for terrain roughness calculation
+	static constexpr float ROUGHNESS_NOISE_SCALE_X = 0.05f;
+	static constexpr float ROUGHNESS_NOISE_SCALE_Y = 0.05f;
+	static constexpr float ROUGHNESS_SEED_MULTIPLIER = 0.5f;
+	static constexpr float ROUGHNESS_HEIGHT_MULTIPLIER = 20.0f;
+
 	FBiomeData BiomeData = GetBiomeData(BiomeType);
 	
 	// Apply biome-specific height multiplier and base offset
@@ -372,9 +389,13 @@ float AWorldGenerator::ApplyBiomeModifiers(float BaseHeight, float X, float Y, E
 	if (BiomeData.TerrainRoughness > 1.0f)
 	{
 		// Add additional high-frequency noise for rough biomes (mountains, volcanic, etc.)
-		FVector RoughnessSample = FVector(X * 0.05f, Y * 0.05f, RandomSeed * 0.5f);
+		FVector RoughnessSample = FVector(
+			X * ROUGHNESS_NOISE_SCALE_X, 
+			Y * ROUGHNESS_NOISE_SCALE_Y, 
+			RandomSeed * ROUGHNESS_SEED_MULTIPLIER
+		);
 		float RoughnessNoise = FMath::PerlinNoise3D(RoughnessSample);
-		ModifiedHeight += RoughnessNoise * 20.0f * (BiomeData.TerrainRoughness - 1.0f);
+		ModifiedHeight += RoughnessNoise * ROUGHNESS_HEIGHT_MULTIPLIER * (BiomeData.TerrainRoughness - 1.0f);
 	}
 	
 	return ModifiedHeight;
@@ -390,6 +411,42 @@ void AWorldGenerator::BlendBiomeEffects(float X, float Y, float& Height, FLinear
 	float HeightFactor = FMath::Clamp((Height + 100.0f) / 200.0f, 0.0f, 1.0f);
 	Color = PrimaryData.BiomeColor * (0.5f + HeightFactor * 0.5f);
 	
-	// TODO: Add smooth blending between adjacent biomes using BiomeBlendFactor
-	// This would sample neighboring positions and blend colors/heights for smoother transitions
+	// Apply biome blending for smooth transitions
+	if (BiomeBlendFactor > 0.0f)
+	{
+		// Sample distance for blending calculation
+		static constexpr float BLEND_SAMPLE_DISTANCE = 500.0f;
+		
+		// Sample neighboring positions to detect biome transitions
+		TArray<FVector2D> SampleOffsets = {
+			FVector2D(BLEND_SAMPLE_DISTANCE, 0.0f),
+			FVector2D(-BLEND_SAMPLE_DISTANCE, 0.0f),
+			FVector2D(0.0f, BLEND_SAMPLE_DISTANCE),
+			FVector2D(0.0f, -BLEND_SAMPLE_DISTANCE)
+		};
+		
+		FLinearColor BlendedColor = PrimaryData.BiomeColor;
+		int32 DifferentBiomeCount = 0;
+		
+		// Check neighboring biomes
+		for (const FVector2D& Offset : SampleOffsets)
+		{
+			EBiomeType NeighborBiome = DetermineBiomeAtPosition(X + Offset.X, Y + Offset.Y);
+			if (NeighborBiome != PrimaryBiome)
+			{
+				FBiomeData NeighborData = GetBiomeData(NeighborBiome);
+				BlendedColor += NeighborData.BiomeColor;
+				DifferentBiomeCount++;
+			}
+		}
+		
+		// If we're near a biome boundary, blend the colors
+		if (DifferentBiomeCount > 0)
+		{
+			float BlendWeight = BiomeBlendFactor * (static_cast<float>(DifferentBiomeCount) / SampleOffsets.Num());
+			BlendedColor = BlendedColor / (DifferentBiomeCount + 1);  // Average colors
+			Color = FMath::Lerp(PrimaryData.BiomeColor, BlendedColor, BlendWeight);
+			Color = Color * (0.5f + HeightFactor * 0.5f);  // Reapply height-based shading
+		}
+	}
 }
