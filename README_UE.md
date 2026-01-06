@@ -39,16 +39,25 @@ StoneAndSword/
 ## Key Systems
 
 ### World Generation System
-The `AWorldGenerator` class provides procedural terrain generation:
-- **Flat terrain with height variation**: Creates a walkable surface with subtle undulation
+The `AWorldGenerator` class provides procedural terrain generation with 12 distinct biome types:
+- **Large-scale biome worlds**: Each biome is a huge, distinct world area (3-10x base world size)
+- **12 biome types**: Tropical Jungle, Temperate Forest, Boreal Taiga, Grasslands, Savanna, Desert, Tundra, Arctic Snow, Mountains, Volcanic Wasteland, Swampland, Rocky Badlands
+- **Realistic terrain with Perlin noise**: Uses industry-standard Perlin noise (Fractional Brownian Motion) for natural-looking landscapes
+- **Biome-specific characteristics**: Each biome has unique height multipliers, colors, roughness, and base elevations
 - **Configurable parameters**:
   - World size (X and Y dimensions)
   - Grid resolution (vertex spacing)
   - Height variation (terrain undulation)
-  - Noise scale (terrain detail)
+  - Noise scale (terrain frequency/detail)
+  - Noise octaves (1-8, controls level of detail)
+  - Noise persistence (0.1-1.0, controls octave contribution)
+  - Noise lacunarity (1.0-4.0, controls frequency multiplier)
   - Random seed (for reproducible worlds)
+  - Current biome type (selects which biome to generate)
+  - Biome world size multiplier (1.0-10.0x for huge biomes)
 - **Auto-generation**: Can automatically generate terrain on level start
 - **Material support**: Apply custom materials to the terrain
+- **Multi-scene architecture**: Each biome can be a separate level/map for boat/ferry traversal
 
 ### Character Controller
 The `AWorldPlayerCharacter` class provides player control:

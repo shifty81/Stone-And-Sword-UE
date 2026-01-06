@@ -188,8 +188,25 @@ Edit settings in WorldGenerator class or via the editor:
 - **World Size**: Increase for larger worlds
 - **Grid Resolution**: Decrease for more detail (warning: affects performance)
 - **Height Variation**: Increase for more dramatic terrain
-- **Noise Scale**: Adjust for different terrain patterns
+- **Noise Scale**: Controls the overall scale/frequency of terrain features
+- **Noise Octaves**: Number of noise layers (1-8, more = more detail, default: 4)
+- **Noise Persistence**: How much each octave contributes (0.1-1.0, default: 0.5)
+- **Noise Lacunarity**: Frequency multiplier between octaves (1.0-4.0, default: 2.0)
 - **Random Seed**: Change to generate different terrain layouts
+
+**Perlin Noise Parameters:**
+The terrain uses proper Perlin noise (Fractional Brownian Motion) for realistic landscapes:
+- Higher octaves add more fine detail but may impact performance
+- Lower persistence creates smoother terrain
+- Higher lacunarity creates more varied, rougher terrain
+
+**Biome System (NEW):**
+Choose from 12 distinct biome types for huge world maps:
+- **Current Biome**: Select which biome to generate (Tropical Jungle, Temperate Forest, Boreal Taiga, Grasslands, Savanna, Desert, Tundra, Arctic Snow, Mountains, Volcanic Wasteland, Swampland, Rocky Badlands)
+- **Biome World Size Multiplier**: Makes biomes larger (1.0-10.0x, default: 3.0x)
+- **Use Biome Specific Generation**: Enables biome-specific terrain modifiers
+
+Each biome is designed as a huge, separate world map/scene. Players traverse between biomes using boat/ferry systems (to be implemented in gameplay).
 
 ### Character Settings
 
