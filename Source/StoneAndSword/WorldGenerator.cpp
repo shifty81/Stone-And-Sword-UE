@@ -167,16 +167,22 @@ float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
 {
 	// Use Perlin noise with multiple octaves for realistic terrain generation
 	// This implements Fractional Brownian Motion (fBM) for natural-looking landscapes
+	
+	// Constants for seed offset calculation (using prime numbers for better distribution)
+	static constexpr float PRIME_MULTIPLIER_X = 0.1031f;
+	static constexpr float PRIME_MULTIPLIER_Y = 0.1030f;
+	static constexpr float PRIME_MULTIPLIER_Z = 0.0973f;
+	static constexpr float OCTAVE_OFFSET_SPACING = 100.0f;
+	
 	float Height = 0.0f;
 	float Amplitude = HeightVariation;
 	float Frequency = NoiseScale;
 	float MaxValue = 0.0f; // Used for normalization
 
 	// Apply random seed offset to make different seeds produce different terrain
-	// Using prime number multipliers for better distribution
-	const float SeedOffsetX = RandomSeed * 0.1031f;
-	const float SeedOffsetY = RandomSeed * 0.1030f;
-	const float SeedOffsetZ = RandomSeed * 0.0973f;
+	const float SeedOffsetX = RandomSeed * PRIME_MULTIPLIER_X;
+	const float SeedOffsetY = RandomSeed * PRIME_MULTIPLIER_Y;
+	const float SeedOffsetZ = RandomSeed * PRIME_MULTIPLIER_Z;
 
 	// Add multiple octaves of Perlin noise
 	for (int32 Octave = 0; Octave < NoiseOctaves; Octave++)
@@ -184,9 +190,9 @@ float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
 		// Sample 3D Perlin noise (using Z=0 for 2D-like terrain)
 		// Add octave-specific offset for variation between octaves
 		FVector SamplePos = FVector(
-			X * Frequency + SeedOffsetX + Octave * 100.0f,
-			Y * Frequency + SeedOffsetY + Octave * 100.0f,
-			SeedOffsetZ + Octave * 100.0f
+			X * Frequency + SeedOffsetX + Octave * OCTAVE_OFFSET_SPACING,
+			Y * Frequency + SeedOffsetY + Octave * OCTAVE_OFFSET_SPACING,
+			SeedOffsetZ + Octave * OCTAVE_OFFSET_SPACING
 		);
 		float NoiseValue = FMath::PerlinNoise3D(SamplePos);
 		
