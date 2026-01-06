@@ -45,10 +45,6 @@ AWorldPlayerCharacter::AWorldPlayerCharacter()
 	CameraComponent->bUsePawnControlRotation = false;
 
 	MovementSpeedMultiplier = 1.0f;
-	
-	// Initialize mesh and animation properties (can be set in editor or blueprint)
-	CharacterMeshAsset = nullptr;
-	AnimationBlueprintClass = nullptr;
 }
 
 void AWorldPlayerCharacter::BeginPlay()
