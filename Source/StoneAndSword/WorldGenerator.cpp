@@ -306,6 +306,23 @@ EBiomeType AWorldGenerator::DetermineBiomeAtPosition(float X, float Y) const
 	// Use temperature-moisture matrix to determine biome
 	// Temperature: 0 (cold) to 1 (hot)
 	// Moisture: 0 (dry) to 1 (wet)
+	
+	// Special case: Check for extreme terrain (Mountains and Rocky Badlands)
+	// Sample additional noise to determine if this area should be mountainous
+	FVector MountainSample = FVector(X * ContinentalScale * 2.0f, Y * ContinentalScale * 2.0f, RandomSeed * 2.0f);
+	float MountainNoise = FMath::PerlinNoise3D(MountainSample);
+	
+	// Mountains can appear anywhere but more likely at continental boundaries (high noise values)
+	if (MountainNoise > 0.6f)
+	{
+		return EBiomeType::Mountains;
+	}
+	
+	// Rocky Badlands appear in hot, dry regions with moderate mountain noise
+	if (Temperature > TEMP_WARM && Moisture < MOISTURE_DRY && MountainNoise > 0.3f)
+	{
+		return EBiomeType::RockyBadlands;
+	}
 
 	if (Temperature < TEMP_VERY_COLD)
 	{
