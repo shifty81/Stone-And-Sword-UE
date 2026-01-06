@@ -358,6 +358,9 @@ EBiomeType AWorldGenerator::DetermineBiomeAtPosition(float X, float Y) const
 		else if (Moisture < MOISTURE_WET) return EBiomeType::Savanna;
 		else return EBiomeType::TropicalJungle;
 	}
+	
+	// Safety fallback (should never reach here due to exhaustive if-else chain above)
+	return EBiomeType::Grasslands;
 }
 
 float AWorldGenerator::CalculateTemperature(float X, float Y) const
