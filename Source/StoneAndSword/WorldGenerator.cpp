@@ -27,6 +27,11 @@ AWorldGenerator::AWorldGenerator()
 	bAutoGenerateOnBeginPlay = true;
 	TerrainMaterial = nullptr;
 
+	// Biome settings for huge world maps
+	CurrentBiome = EBiomeType::Grasslands;
+	BiomeWorldSizeMultiplier = 3.0f;  // Makes biomes 3x larger by default
+	bUseBiomeSpecificGeneration = true;
+
 	// Enable collision for the procedural mesh
 	ProceduralMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	ProceduralMesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
@@ -110,6 +115,9 @@ void AWorldGenerator::GenerateTerrainMesh(TArray<FVector>& Vertices, TArray<int3
 	// Initialize random stream
 	FRandomStream RandomStream(RandomSeed);
 
+	// Get current biome data
+	FBiomeData BiomeData = GetBiomeData(CurrentBiome);
+
 	// Generate vertices
 	for (int32 Y = 0; Y < NumVerticesY; Y++)
 	{
@@ -130,9 +138,11 @@ void AWorldGenerator::GenerateTerrainMesh(TArray<FVector>& Vertices, TArray<int3
 			// Add normal (pointing up for flat terrain)
 			Normals.Add(FVector(0.0f, 0.0f, 1.0f));
 
-			// Add vertex color based on height
-			uint8 ColorValue = FMath::Clamp(static_cast<int32>(128 + Height), 0, 255);
-			VertexColors.Add(FColor(ColorValue, ColorValue, ColorValue, 255));
+			// Add vertex color based on biome color and height
+			FLinearColor BaseColor = BiomeData.BiomeColor;
+			float HeightFactor = FMath::Clamp((Height + 100.0f) / 200.0f, 0.0f, 1.0f);
+			FLinearColor FinalColor = BaseColor * (0.5f + HeightFactor * 0.5f);
+			VertexColors.Add(FinalColor.ToFColor(false));
 		}
 	}
 
@@ -211,5 +221,77 @@ float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
 		Height = (Height / MaxValue) * HeightVariation;
 	}
 
+	// Apply biome-specific modifiers if enabled
+	if (bUseBiomeSpecificGeneration)
+	{
+		Height = ApplyBiomeModifiers(Height, X, Y);
+	}
+
 	return Height;
+}
+
+FBiomeData AWorldGenerator::GetBiomeData(EBiomeType BiomeType) const
+{
+	// Define characteristics for each of the 12 biome types
+	// Each biome is designed to be a huge, distinct world area
+	switch (BiomeType)
+	{
+		case EBiomeType::TropicalJungle:
+			return FBiomeData(TEXT("Tropical Jungle"), 1.5f, FLinearColor(0.1f, 0.6f, 0.2f), 0.0f, 2.0f, TEXT("TropicalJungle"));
+		
+		case EBiomeType::TemperateForest:
+			return FBiomeData(TEXT("Temperate Forest"), 1.2f, FLinearColor(0.3f, 0.7f, 0.3f), 0.0f, 1.5f, TEXT("TemperateForest"));
+		
+		case EBiomeType::BorealTaiga:
+			return FBiomeData(TEXT("Boreal Taiga"), 1.0f, FLinearColor(0.2f, 0.5f, 0.3f), 0.0f, 1.3f, TEXT("BorealTaiga"));
+		
+		case EBiomeType::Grasslands:
+			return FBiomeData(TEXT("Grasslands"), 0.5f, FLinearColor(0.4f, 0.8f, 0.3f), 0.0f, 0.5f, TEXT("Grasslands"));
+		
+		case EBiomeType::Savanna:
+			return FBiomeData(TEXT("Savanna"), 0.8f, FLinearColor(0.7f, 0.7f, 0.3f), 0.0f, 1.0f, TEXT("Savanna"));
+		
+		case EBiomeType::Desert:
+			return FBiomeData(TEXT("Desert"), 1.2f, FLinearColor(0.9f, 0.8f, 0.5f), 0.0f, 1.8f, TEXT("Desert"));
+		
+		case EBiomeType::Tundra:
+			return FBiomeData(TEXT("Tundra"), 0.6f, FLinearColor(0.6f, 0.7f, 0.7f), 0.0f, 0.8f, TEXT("Tundra"));
+		
+		case EBiomeType::ArcticSnow:
+			return FBiomeData(TEXT("Arctic Snow"), 1.5f, FLinearColor(0.9f, 0.95f, 1.0f), 50.0f, 2.0f, TEXT("ArcticSnow"));
+		
+		case EBiomeType::Mountains:
+			return FBiomeData(TEXT("Mountains"), 3.0f, FLinearColor(0.5f, 0.5f, 0.5f), 100.0f, 3.0f, TEXT("Mountains"));
+		
+		case EBiomeType::VolcanicWasteland:
+			return FBiomeData(TEXT("Volcanic Wasteland"), 2.5f, FLinearColor(0.4f, 0.2f, 0.1f), 20.0f, 2.5f, TEXT("VolcanicWasteland"));
+		
+		case EBiomeType::Swampland:
+			return FBiomeData(TEXT("Swampland"), 0.4f, FLinearColor(0.3f, 0.4f, 0.3f), -20.0f, 1.2f, TEXT("Swampland"));
+		
+		case EBiomeType::RockyBadlands:
+			return FBiomeData(TEXT("Rocky Badlands"), 2.0f, FLinearColor(0.6f, 0.4f, 0.3f), 30.0f, 2.2f, TEXT("RockyBadlands"));
+		
+		default:
+			return FBiomeData(TEXT("Default"), 1.0f, FLinearColor::White, 0.0f, 1.0f, TEXT("Default"));
+	}
+}
+
+float AWorldGenerator::ApplyBiomeModifiers(float BaseHeight, float X, float Y) const
+{
+	FBiomeData BiomeData = GetBiomeData(CurrentBiome);
+	
+	// Apply biome-specific height multiplier and base offset
+	float ModifiedHeight = (BaseHeight * BiomeData.HeightMultiplier) + BiomeData.BaseHeightOffset;
+	
+	// Apply terrain roughness (affects the character of the terrain)
+	if (BiomeData.TerrainRoughness > 1.0f)
+	{
+		// Add additional high-frequency noise for rough biomes (mountains, volcanic, etc.)
+		FVector RoughnessSample = FVector(X * 0.05f, Y * 0.05f, RandomSeed * 0.5f);
+		float RoughnessNoise = FMath::PerlinNoise3D(RoughnessSample);
+		ModifiedHeight += RoughnessNoise * 20.0f * (BiomeData.TerrainRoughness - 1.0f);
+	}
+	
+	return ModifiedHeight;
 }

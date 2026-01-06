@@ -11,9 +11,77 @@ class UProceduralMeshComponent;
 class UMaterialInterface;
 
 /**
- * Procedural world generator that creates terrain for the open world.
- * Uses ProceduralMeshComponent to generate runtime terrain with configurable parameters.
- * Supports auto-generation, custom materials, and physics collision.
+ * Biome types for procedural world generation
+ * Each biome represents a large, distinct world area/scene
+ */
+UENUM(BlueprintType)
+enum class EBiomeType : uint8
+{
+	TropicalJungle		UMETA(DisplayName = "Tropical Jungle"),
+	TemperateForest		UMETA(DisplayName = "Temperate Forest"),
+	BorealTaiga			UMETA(DisplayName = "Boreal Taiga"),
+	Grasslands			UMETA(DisplayName = "Grasslands/Plains"),
+	Savanna				UMETA(DisplayName = "Savanna"),
+	Desert				UMETA(DisplayName = "Desert"),
+	Tundra				UMETA(DisplayName = "Tundra"),
+	ArcticSnow			UMETA(DisplayName = "Arctic Snow"),
+	Mountains			UMETA(DisplayName = "Mountains"),
+	VolcanicWasteland	UMETA(DisplayName = "Volcanic Wasteland"),
+	Swampland			UMETA(DisplayName = "Swampland"),
+	RockyBadlands		UMETA(DisplayName = "Rocky Badlands")
+};
+
+/**
+ * Biome data structure containing terrain properties for large-scale biome worlds
+ */
+USTRUCT(BlueprintType)
+struct FBiomeData
+{
+	GENERATED_BODY()
+
+	/** Display name of the biome */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
+	FString BiomeName;
+
+	/** Height multiplier for this biome's terrain variation */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
+	float HeightMultiplier = 1.0f;
+
+	/** Base height offset for this biome (e.g., mountains start higher) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
+	float BaseHeightOffset = 0.0f;
+
+	/** Color tint for this biome's terrain */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
+	FLinearColor BiomeColor = FLinearColor::White;
+
+	/** Terrain roughness factor (affects noise frequency) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
+	float TerrainRoughness = 1.0f;
+
+	/** Map/Scene name for this biome world */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biome")
+	FString SceneName;
+
+	FBiomeData() = default;
+
+	FBiomeData(const FString& InName, float InHeightMultiplier, const FLinearColor& InColor, 
+		float InBaseOffset = 0.0f, float InRoughness = 1.0f, const FString& InSceneName = TEXT(""))
+		: BiomeName(InName)
+		, HeightMultiplier(InHeightMultiplier)
+		, BaseHeightOffset(InBaseOffset)
+		, BiomeColor(InColor)
+		, TerrainRoughness(InRoughness)
+		, SceneName(InSceneName)
+	{
+	}
+};
+
+/**
+ * Procedural world generator that creates terrain for large-scale biome worlds.
+ * Each biome is a huge, distinct area that functions as its own world map/scene.
+ * Players traverse between biomes using boat/ferry systems (implemented separately).
+ * Supports 10+ distinct biome types with unique terrain characteristics.
  */
 UCLASS()
 class STONEANDSWORD_API AWorldGenerator : public AActor
@@ -98,6 +166,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation")
 	int32 RandomSeed;
 
+	/** Current biome type for this world instance */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biomes")
+	EBiomeType CurrentBiome;
+
+	/** World size multiplier for huge biomes (multiplies base world size) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biomes", meta = (ClampMin = "1.0", ClampMax = "10.0"))
+	float BiomeWorldSizeMultiplier;
+
+	/** Enable biome-specific terrain generation */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Biomes")
+	bool bUseBiomeSpecificGeneration;
+
 	/** Auto-generate world on begin play */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation")
 	bool bAutoGenerateOnBeginPlay;
@@ -112,6 +192,12 @@ private:
 							 TArray<FVector>& Normals, TArray<FVector2D>& UVs, 
 							 TArray<FColor>& VertexColors);
 
-	/** Calculate terrain height at a given position */
+	/** Calculate terrain height at a given position with biome-specific modifications */
 	float CalculateTerrainHeight(float X, float Y) const;
+
+	/** Get biome data for a specific biome type */
+	FBiomeData GetBiomeData(EBiomeType BiomeType) const;
+
+	/** Apply biome-specific effects to height calculation */
+	float ApplyBiomeModifiers(float BaseHeight, float X, float Y) const;
 };
