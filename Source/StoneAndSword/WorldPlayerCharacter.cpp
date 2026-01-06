@@ -44,7 +44,7 @@ AWorldPlayerCharacter::AWorldPlayerCharacter()
 
 	// Initialize properties
 	MovementSpeedMultiplier = 1.0f;
-	bShowBodyInFirstPerson = false; // Default: hide body, only show arms if set
+	bShowBodyInFirstPerson = true; // Default: show body in first-person view
 }
 
 void AWorldPlayerCharacter::BeginPlay()
