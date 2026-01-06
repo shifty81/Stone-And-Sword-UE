@@ -36,15 +36,18 @@ Follow `QUICK_START.md` for step-by-step instructions.
 
 ### Animation Blueprint (15 minutes)
 - [ ] **ABP_PlayerCharacter** - Animation Blueprint
+  - **NEW!** See **[CHARACTER_SETUP_GUIDE.md](CHARACTER_SETUP_GUIDE.md)** for detailed instructions
   - Skeleton: Import from Mixamo or use Third Person Template
   - State Machine: Idle, Walk, Run, Jump
   - Animation Assets: Download from Mixamo or use starter content
 
 ### Character Mesh (20 minutes)
 - [ ] **SK_PlayerCharacter** - Skeletal Mesh
+  - **NEW!** See **[CHARACTER_SETUP_GUIDE.md](CHARACTER_SETUP_GUIDE.md)** for detailed instructions
   - Import from Mixamo (free)
   - Or use Third Person Template character
   - Assign to WorldPlayerCharacter in C++ or Blueprint
+  - **C++ support added**: Can set CharacterMeshAsset and AnimationBlueprintClass properties
 
 ### Environment Assets (Optional, as needed)
 - [ ] **SM_Tree** - Tree static mesh

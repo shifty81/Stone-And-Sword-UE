@@ -35,9 +35,10 @@ Stone and Sword is evolving from an Unreal Engine 5.4 project to a **custom C++ 
 
 ### Current State (Unreal Engine 5.6.1)
 - ✅ Complete C++ source code for procedural world generation
-- ✅ Third-person character controller with camera
+- ✅ First-person character controller with camera
 - ✅ Automatic world setup system
 - ✅ WASD movement, mouse look, jump mechanics
+- ✅ FPS-style controls and rotation
 - ✅ Basic terrain textures (grass, stone, dirt, normal maps)
 - ✅ Ready to open in Unreal Engine 5.6 and start building
 - ⚠️ **Requires creating map and materials in Unreal Editor** (10-minute setup, see QUICK_START.md)
@@ -61,20 +62,27 @@ Stone and Sword is evolving from an Unreal Engine 5.4 project to a **custom C++ 
    - Test movement and controls
    - Minimal steps to get playing
 
-2. **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** 🔧 **Build Issues?**
+2. **[CHARACTER_SETUP_GUIDE.md](CHARACTER_SETUP_GUIDE.md)** 🎮 **Add Visible Arms! (Optional)**
+   - Add optional first-person arms/hands with animations
+   - Use free store assets (UE First Person Template, Mixamo, Marketplace)
+   - Fully C++ FPS gameplay (already implemented)
+   - Pure FPS works by default (no visible body needed)
+   - Step-by-step for each method (5-20 minutes)
+
+3. **[TROUBLESHOOTING_BUILD.md](TROUBLESHOOTING_BUILD.md)** 🔧 **Build Issues?**
    - Complete guide to fixing "StoneAndSword could not be compiled" errors
    - Step-by-step solutions for all common build problems
    - Automated build script included
    - Prerequisites checklist and verification
 
-3. **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)** 📖
+4. **[SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md)** 📖
    - Comprehensive setup guide
    - Detailed explanations for each step
    - Adding proper animations and character models
    - Customization options
    - Troubleshooting guide
 
-4. **[QUICKSTART.md](QUICKSTART.md)** (Legacy)
+5. **[QUICKSTART.md](QUICKSTART.md)** (Legacy)
    - Original quick start guide
    - Building and packaging instructions
    - Advanced customization

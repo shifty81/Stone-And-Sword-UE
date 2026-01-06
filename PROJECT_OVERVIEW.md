@@ -22,10 +22,11 @@
 │  │  └── Sets default pawn to WorldPlayerCharacter          │    │
 │  │                                                           │    │
 │  │  AWorldPlayerCharacter                                   │    │
-│  │  ├── Third-person character controller                  │    │
-│  │  ├── Camera system (Spring Arm + Camera)                │    │
+│  │  ├── First-person character controller                  │    │
+│  │  ├── Camera system (First-Person Camera)                │    │
 │  │  ├── Input handling (WASD, Mouse, Gamepad)              │    │
-│  │  └── Movement and jump mechanics                         │    │
+│  │  ├── Movement and jump mechanics                         │    │
+│  │  └── Optional first-person arms/hands support           │    │
 │  │                                                           │    │
 │  │  AWorldGenerator                                         │    │
 │  │  ├── Procedural mesh generation                          │    │
@@ -136,9 +137,9 @@ UObject (Unreal Engine Base)
   │       └── ACharacter
   │           │
   │           └── AWorldPlayerCharacter
-  │               ├── Uses: UCameraComponent
-  │               ├── Uses: USpringArmComponent
-  │               └── Uses: UCharacterMovementComponent
+  │               ├── Uses: UCameraComponent (First-Person)
+  │               ├── Uses: UCharacterMovementComponent
+  │               └── Optional: First-person arms mesh
   │
   └── AGameModeBase
       │
@@ -161,10 +162,11 @@ UObject (Unreal Engine Base)
 - **Extensible**: Easy to add biomes, vegetation, and advanced features
 
 ### 🎮 Player Controller
-- **Third-Person View**: Spring arm camera system with smooth following
+- **First-Person View**: Camera at eye level for immersive FPS experience
 - **Standard Controls**: WASD movement, mouse look, spacebar jump
 - **Gamepad Support**: Full controller compatibility
-- **Customizable**: Movement speed, camera distance, rotation rates
+- **Customizable**: Movement speed, camera height, rotation rates
+- **Optional Arms**: Can add visible first-person arms/hands
 
 ### 🎨 Material System
 - **Generic Textures**: Grass, stone, dirt, and normal maps included

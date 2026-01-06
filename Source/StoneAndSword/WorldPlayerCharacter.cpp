@@ -3,8 +3,9 @@
 #include "WorldPlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "Animation/AnimInstance.h"
 
 AWorldPlayerCharacter::AWorldPlayerCharacter()
 {
@@ -14,35 +15,67 @@ AWorldPlayerCharacter::AWorldPlayerCharacter()
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
-	// Don't rotate when the controller rotates
-	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
+	// Configure the character mesh (inherited from ACharacter) - body mesh
+	// Position mesh below capsule
+	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -96.0f));
+	GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+	// By default, owner won't see this mesh (first-person - don't see own body unless enabled)
+	GetMesh()->SetOwnerNoSee(true);
+	
+	// Configure controller rotation for first-person
+	// Character rotates with camera yaw (looking left/right)
+	bUseControllerRotationPitch = false; // Don't tilt character when looking up/down
+	bUseControllerRotationYaw = true;    // Rotate character when turning camera left/right
 	bUseControllerRotationRoll = false;
 
-	// Configure character movement
-	GetCharacterMovement()->bOrientRotationToMovement = true;
-	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
+	// Configure character movement for first-person
+	GetCharacterMovement()->bOrientRotationToMovement = false; // Don't rotate to movement direction in FPS
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f); // Faster rotation for FPS
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.0f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.0f;
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f;
-	CameraBoom->bUsePawnControlRotation = true;
+	// Create first-person camera
+	// Attached to mesh at eye level (socket "head" if exists, or fixed offset)
+	FirstPersonCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FirstPersonCamera->SetupAttachment(GetCapsuleComponent());
+	FirstPersonCamera->SetRelativeLocation(FVector(0.0f, 0.0f, 64.0f)); // Eye height (adjust as needed)
+	FirstPersonCamera->bUsePawnControlRotation = true; // Camera follows controller rotation
 
-	// Create a follow camera
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	CameraComponent->bUsePawnControlRotation = false;
-
+	// Initialize properties
 	MovementSpeedMultiplier = 1.0f;
+	bShowBodyInFirstPerson = false; // Default: hide body, only show arms if set
 }
 
 void AWorldPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	// Apply first-person arms mesh if set
+	if (FirstPersonArmsMesh && GetMesh())
+	{
+		// Note: For a more robust implementation, consider creating a dedicated
+		// USkeletalMeshComponent for first-person arms attached to the camera.
+		// This simplified approach uses the main mesh for arms.
+		GetMesh()->SetSkeletalMesh(FirstPersonArmsMesh);
+		GetMesh()->SetOwnerNoSee(false); // Show arms to owner
+		GetMesh()->SetOnlyOwnerSee(true); // Hide from others (for multiplayer)
+		
+		// Apply animation blueprint for arms
+		if (FirstPersonArmsAnimationClass)
+		{
+			GetMesh()->SetAnimInstanceClass(FirstPersonArmsAnimationClass);
+		}
+	}
+	else
+	{
+		// No arms mesh set - configure body mesh visibility
+		if (GetMesh())
+		{
+			// Hide body in first-person unless explicitly enabled
+			GetMesh()->SetOwnerNoSee(!bShowBodyInFirstPerson);
+		}
+	}
 }
 
 void AWorldPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
