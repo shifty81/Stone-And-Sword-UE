@@ -82,6 +82,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation", meta = (ClampMin = "0.001", ClampMax = "1.0"))
 	float NoiseScale;
 
+	/** Number of octaves for Perlin noise (more octaves = more detail) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation", meta = (ClampMin = "1", ClampMax = "8"))
+	int32 NoiseOctaves;
+
+	/** Persistence - how much each octave contributes (amplitude multiplier) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation", meta = (ClampMin = "0.1", ClampMax = "1.0"))
+	float NoisePersistence;
+
+	/** Lacunarity - frequency multiplier for each octave */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation", meta = (ClampMin = "1.0", ClampMax = "4.0"))
+	float NoiseLacunarity;
+
 	/** Random seed for world generation */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "World Generation")
 	int32 RandomSeed;

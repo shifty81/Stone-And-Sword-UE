@@ -20,6 +20,9 @@ AWorldGenerator::AWorldGenerator()
 	GridResolution = 100.0f;
 	HeightVariation = 50.0f;
 	NoiseScale = 0.01f;
+	NoiseOctaves = 4;
+	NoisePersistence = 0.5f;
+	NoiseLacunarity = 2.0f;
 	RandomSeed = 12345;
 	bAutoGenerateOnBeginPlay = true;
 	TerrainMaterial = nullptr;
@@ -162,18 +165,36 @@ void AWorldGenerator::GenerateTerrainMesh(TArray<FVector>& Vertices, TArray<int3
 
 float AWorldGenerator::CalculateTerrainHeight(float X, float Y) const
 {
-	// Simple Perlin-like noise using sine waves for height variation
+	// Use Perlin noise with multiple octaves for realistic terrain generation
+	// This implements Fractional Brownian Motion (fBM) for natural-looking landscapes
 	float Height = 0.0f;
-
-	// Add multiple octaves of noise for more natural terrain
-	float Frequency = NoiseScale;
 	float Amplitude = HeightVariation;
+	float Frequency = NoiseScale;
+	float MaxValue = 0.0f; // Used for normalization
 
-	for (int32 Octave = 0; Octave < 3; Octave++)
+	// Apply random seed offset to make different seeds produce different terrain
+	FVector SeedOffset = FVector(RandomSeed * 0.1f, RandomSeed * 0.2f, RandomSeed * 0.3f);
+
+	// Add multiple octaves of Perlin noise
+	for (int32 Octave = 0; Octave < NoiseOctaves; Octave++)
 	{
-		Height += FMath::Sin(X * Frequency) * FMath::Cos(Y * Frequency) * Amplitude;
-		Frequency *= 2.0f;
-		Amplitude *= 0.5f;
+		// Sample 3D Perlin noise (using Z=0 for 2D-like terrain)
+		FVector SamplePos = FVector(X * Frequency, Y * Frequency, 0.0f) + SeedOffset;
+		float NoiseValue = FMath::PerlinNoise3D(SamplePos);
+		
+		// PerlinNoise3D returns values roughly in [-1, 1], so we don't need additional scaling
+		Height += NoiseValue * Amplitude;
+		MaxValue += Amplitude;
+
+		// Prepare for next octave
+		Amplitude *= NoisePersistence;  // Each octave has less impact
+		Frequency *= NoiseLacunarity;   // Each octave has higher frequency (more detail)
+	}
+
+	// Normalize to keep the height variation within expected range
+	if (MaxValue > 0.0f)
+	{
+		Height = (Height / MaxValue) * HeightVariation;
 	}
 
 	return Height;
